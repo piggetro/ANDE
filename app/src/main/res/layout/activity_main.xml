@@ -29,13 +29,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="How are you feeling today?"
+            android:fontFamily="@font/barlow_bold"
             android:textColor="#FFFFFF"
-            android:textSize="24dp"
+            android:textSize="26dp"
             android:textStyle="bold"
             android:textAlignment="center"
             android:shadowColor="#000000"
             android:shadowDx="0"
             android:shadowDy="3"
-            android:shadowRadius="4" />
+            android:shadowRadius="6" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="-50dp"
+            app:srcCompat="@drawable/homepage_emoji" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
