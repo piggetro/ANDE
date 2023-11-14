@@ -81,9 +81,12 @@
                     android:id="@+id/button3"
                     android:layout_width="173dp"
                     android:layout_height="104.832298137dp"
+                    android:drawableTop="@drawable/meditation_plant_image"
                     android:text="Meditation"
+                    android:textStyle="bold"
                     android:textColor="#7DA9AC"
                     android:background="@drawable/custom_button"
+                    android:padding="3dp"
                     android:layout_marginBottom="5dp"
                     android:layout_gravity="center" />
 
@@ -91,11 +94,16 @@
                     android:id="@+id/button4"
                     android:layout_width="173dp"
                     android:layout_height="104.832298137dp"
+                    android:drawableTop="@drawable/calendar"
+                    android:drawablePadding="-8dp"
                     android:text="Calendar"
+                    android:textStyle="bold"
                     android:textColor="#7DA9AC"
+                    android:paddingTop="15dp"
                     android:background="@drawable/custom_button"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center" />
+
             </LinearLayout>
         </LinearLayout>
 
