@@ -1,8 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.StartApp" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_anim</item>
-        <item name="postSplashScreenTheme">@style/Theme.ANDE</item>
-        <item name="windowSplashScreenBackground">#7DA9AC</item>
-    </style>
 </resources>
