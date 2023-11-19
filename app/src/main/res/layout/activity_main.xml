@@ -77,7 +77,8 @@
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/meditationButton"
+                    android:onClick="onClick"
                     android:layout_width="173dp"
                     android:layout_height="104.832298137dp"
                     android:drawableTop="@drawable/meditation_plant_image"
