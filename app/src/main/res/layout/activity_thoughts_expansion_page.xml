@@ -78,6 +78,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/plus_icon"
+        app:tint="#FFFFFF"
+        app:backgroundTint="#7DA9AC"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
