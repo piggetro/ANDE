@@ -27,16 +27,16 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thoughts_expansion_page);
 
-//        autoCompleteTextView = findViewById(R.id.auto_complete_text_view);
-//        sortByDropDownAdapter = new ArrayAdapter<>(this, R.layout.list_item, sortByDropDownItems);
-//        autoCompleteTextView.setAdapter(sortByDropDownAdapter);
-//        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String item = parent.getItemAtPosition(position).toString();
-//                Toast.makeText(ThoughtsExpansionPage.this, "Selected: " + item, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        autoCompleteTextView = findViewById(R.id.auto_complete_text_view);
+        sortByDropDownAdapter = new ArrayAdapter<>(this, R.layout.list_item, sortByDropDownItems);
+        autoCompleteTextView.setAdapter(sortByDropDownAdapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(ThoughtsExpansionPage.this, "Selected: " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         addThoughtButton = findViewById(R.id.addThoughtButton);
         isAllFabsVisible = false;

@@ -5,5 +5,10 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="MaterialComponentsLightNoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar" >
+        <item name="colorPrimary">#7DA9AC</item>
+        <item name="colorAccent">#8AD4D9</item>
+    </style>
+
     <style name="Theme.ANDE" parent="Base.Theme.ANDE" />
 </resources>
