@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ThoughtsExpansionPage"
+    android:background="@drawable/defaultbackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".SettingsActivity"
+        tools:layout_editor_absoluteX="-117dp"
+        tools:layout_editor_absoluteY="117dp">
+        <ImageView
+            android:id="@+id/thoughtsExpansionPageBackButton"
+            android:onClick="onClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:srcCompat="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/thoughtsExpansionDateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="24 NOV 23"
+            android:fontFamily="@font/barlow_bold"
+            android:textColor="#FFFFFF"
+            android:textSize="13dp"
+            android:textAlignment="center" />
+        <TextView
+            android:id="@+id/thoughtsExpansionPageTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="THOUGHTS"
+            android:fontFamily="@font/barlow_bold"
+            android:textColor="#FFFFFF"
+            android:textSize="33dp"
+            android:textAlignment="center" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/star_eyes_smiling_emoji" />
+
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
+<!--            android:layout_width="109dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="20dp"-->
+<!--            android:hint="@string/selectSortBy">-->
+
+<!--            <AutoCompleteTextView-->
+<!--                android:id="@+id/auto_complete_text_view"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:inputType="none"-->
+<!--                android:text="Sort by"-->
+<!--                />-->
+
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
