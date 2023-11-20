@@ -17,8 +17,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.meditationButton) {
-
             Intent intent = new Intent(this, MeditationPage.class);
+            startActivity(intent);
+        } else if (v.getId() == R.id.settingsButton) {
+            Intent intent = new Intent(this, SettingsPage.class);
             startActivity(intent);
         }
     }
