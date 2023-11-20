@@ -10,11 +10,17 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnClickListener {
 
     String[] sortByDropDownItems = {"Earliest", "Latest"};
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> sortByDropDownAdapter;
+
+    FloatingActionButton addThoughtButton;
+    Boolean isAllFabsVisible;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,14 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 //                Toast.makeText(ThoughtsExpansionPage.this, "Selected: " + item, Toast.LENGTH_SHORT).show();
 //            }
 //        });
+
+        addThoughtButton = findViewById(R.id.addThoughtButton);
+        isAllFabsVisible = false;
+
+        addThoughtButton.setOnClickListener(view -> {
+            Toast.makeText(ThoughtsExpansionPage.this, "Add Thought Button Click", Toast.LENGTH_SHORT
+            ).show();
+        });
     }
 
     @Override
