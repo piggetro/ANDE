@@ -46,6 +46,8 @@
                 android:gravity="end">
 
                 <ImageView
+                    android:id="@+id/meditationBackButton"
+                    android:onClick="onClick"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/cross_icon"

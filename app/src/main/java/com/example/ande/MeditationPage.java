@@ -2,13 +2,15 @@ package com.example.ande;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class MeditationPage extends AppCompatActivity {
+public class MeditationPage extends AppCompatActivity implements View.OnClickListener {
 
     private ProgressBar progressBar;
     private TextView progressText;
@@ -44,6 +46,14 @@ public class MeditationPage extends AppCompatActivity {
         };
 
         countDownTimer.start();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.meditationBackButton) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 }
 
