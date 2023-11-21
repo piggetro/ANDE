@@ -30,7 +30,9 @@
             android:fontFamily="@font/barlow_bold"
             android:text="Notifications"
             android:textColor="@color/white"
-            android:textSize="21dp" />
+            android:textSize="21dp"
+            app:thumbTint="@color/settings_switch_thumb_selector"
+            app:trackTint="@color/settings_switch_track_selector" />
 
         <TextView
             android:id="@+id/switchNotificationsDescription"
@@ -54,7 +56,9 @@
             android:fontFamily="@font/barlow_bold"
             android:text="Sound"
             android:textColor="@color/white"
-            android:textSize="21dp" />
+            android:textSize="21dp"
+            app:thumbTint="@color/settings_switch_thumb_selector"
+            app:trackTint="@color/settings_switch_track_selector"/>
 
         <TextView
             android:id="@+id/switchSoundDescriptions"
