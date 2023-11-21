@@ -1,13 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ANDE" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#7DA9AC</item>
+        <item name="colorAccent">#8AD4D9</item>
+        <item name="android:statusBarColor">#94B4BA</item>
     </style>
 
     <style name="MaterialComponentsLightNoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar" >
         <item name="colorPrimary">#7DA9AC</item>
         <item name="colorAccent">#8AD4D9</item>
+        <item name="android:statusBarColor">#94B4BA</item>
     </style>
 
     <style name="Theme.ANDE" parent="Base.Theme.ANDE" />
