@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ANDE</string>
+    <string name="selectSortBy">Sort By</string>
 </resources>
