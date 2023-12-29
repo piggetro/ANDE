@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, SettingsPage.class);
             startActivity(intent);
         } else if (v.getId() == R.id.calendarButton) {
-            Intent intent = new Intent(this, ThoughtsExpansionPage.class);
+            Intent intent = new Intent(this, CalendarPage.class);
             startActivity(intent);
         }
     }
