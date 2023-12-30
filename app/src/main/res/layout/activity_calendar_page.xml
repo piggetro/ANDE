@@ -18,9 +18,12 @@
             android:paddingTop="20dp"
             android:paddingHorizontal="20dp"
             >
+
             <ImageView
+                android:id="@+id/calendarBackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="onClick"
                 android:src="@drawable/arrow_back" />
         </LinearLayout>
 
@@ -61,10 +64,11 @@
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/viewMoreCalendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/view_more"
-                    />
+                    android:onClick="onClick"
+                    android:src="@drawable/view_more" />
             </LinearLayout>
 
             <LinearLayout
@@ -93,22 +97,22 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/calendarThoughts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/thoughts"
-                        android:paddingHorizontal="20dp"
-                        >
+                        android:onClick="onClick"
+                        android:paddingHorizontal="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:textColor="#7DA9AC"
-                            android:text="Happy monke"
-                            android:gravity="center_vertical"
                             android:fontFamily="@font/barlow"
-                            android:textStyle="bold"
+                            android:gravity="center_vertical"
+                            android:text="Happy monke"
+                            android:textColor="#7DA9AC"
                             android:textSize="15sp"
-                            />
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
