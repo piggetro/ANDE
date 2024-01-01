@@ -61,11 +61,16 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="891dp"
-                    android:layout_height="436.5dp"
+                    android:id="@+id/farmButton"
+                    android:layout_width="196dp"
+                    android:layout_height="381dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="-120dp"
+                    android:adjustViewBounds="false"
+                    android:cropToPadding="false"
+                    android:scaleType="center"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:onClick="onClick"
                     android:src="@drawable/farm_button_homepage" />
             </LinearLayout>
 

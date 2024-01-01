@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.getId() == R.id.calendarButton) {
             Intent intent = new Intent(this, CalendarPage.class);
             startActivity(intent);
+        } else if (v.getId() == R.id.farmButton) {
+            Intent intent = new Intent(this, FarmCollection.class);
+            startActivity(intent);
         }
     }
 }
