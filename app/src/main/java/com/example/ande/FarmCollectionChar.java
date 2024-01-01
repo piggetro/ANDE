@@ -95,6 +95,10 @@ public class FarmCollectionChar extends Fragment {
         characterList.add(new CollectionChar("Oink", R.drawable.emotioncows));
         characterList.add(new CollectionChar("What", R.drawable.happycow));
         characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
+        characterList.add(new CollectionChar("Oink", R.drawable.emotioncows));
+        characterList.add(new CollectionChar("What", R.drawable.happycow));
+        characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
+        characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
 
         return characterList;
     }
