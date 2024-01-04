@@ -13,28 +13,28 @@
         android:theme="@style/Theme.ANDE"
         tools:targetApi="31">
         <activity
-            android:name=".FarmCollection"
+            android:name=".activity.FarmCollection"
             android:exported="false" />
         <activity
-            android:name=".LoginSignupPage"
+            android:name=".activity.LoginSignupPage"
             android:exported="false" /> <!-- <activity -->
         <!-- android:name=".login_signup_page" -->
         <!-- android:exported="false" /> -->
         <activity
-            android:name=".ThoughtsExpansionPage"
+            android:name=".activity.ThoughtsExpansionPage"
             android:exported="false"
             android:theme="@style/MaterialComponentsLightNoActionBar" />
         <activity
-            android:name=".SettingsPage"
+            android:name=".activity.SettingsPage"
             android:exported="false" />
         <activity
-            android:name=".MeditationPage"
+            android:name=".activity.MeditationPage"
             android:exported="false" />
         <activity
-            android:name=".CalendarPage"
+            android:name=".activity.CalendarPage"
             android:exported="false" />
         <activity
-            android:name=".Splash"
+            android:name=".activity.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true" />
     </application>
 

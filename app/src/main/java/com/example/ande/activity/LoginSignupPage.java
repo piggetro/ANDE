@@ -1,4 +1,4 @@
-package com.example.ande;
+package com.example.ande.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -6,6 +6,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 
+import com.example.ande.R;
+import com.example.ande.helpers.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 public class LoginSignupPage extends AppCompatActivity {

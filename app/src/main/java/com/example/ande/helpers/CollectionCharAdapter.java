@@ -1,12 +1,15 @@
-package com.example.ande;
+package com.example.ande.helpers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.ande.R;
+import com.example.ande.activity.CollectionChar;
+import com.example.ande.activity.CollectionCharViewHolder;
 
 import java.util.List;
 

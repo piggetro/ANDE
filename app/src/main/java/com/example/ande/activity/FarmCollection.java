@@ -1,10 +1,11 @@
-package com.example.ande;
+package com.example.ande.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
+
+import com.example.ande.R;
 
 public class FarmCollection extends AppCompatActivity {
 

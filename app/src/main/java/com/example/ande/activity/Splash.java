@@ -1,9 +1,11 @@
-package com.example.ande;
+package com.example.ande.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.example.ande.R;
 
 public class Splash extends AppCompatActivity {
     @Override

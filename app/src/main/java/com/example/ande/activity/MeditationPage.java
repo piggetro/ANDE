@@ -1,14 +1,15 @@
-package com.example.ande;
+package com.example.ande.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.ande.R;
 
 public class MeditationPage extends AppCompatActivity implements View.OnClickListener {
 

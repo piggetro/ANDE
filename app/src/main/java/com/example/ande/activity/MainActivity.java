@@ -1,10 +1,12 @@
-package com.example.ande;
+package com.example.ande.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.ande.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

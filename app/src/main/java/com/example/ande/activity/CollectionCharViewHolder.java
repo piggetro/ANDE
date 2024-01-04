@@ -1,10 +1,12 @@
-package com.example.ande;
+package com.example.ande.activity;
 
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.ande.R;
 
 public class CollectionCharViewHolder extends RecyclerView.ViewHolder {
     public ImageView characterImage;

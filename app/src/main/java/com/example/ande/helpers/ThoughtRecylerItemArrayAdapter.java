@@ -1,4 +1,4 @@
-package com.example.ande;
+package com.example.ande.helpers;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.ande.R;
+import com.example.ande.activity.ThoughtRecyclerItem;
 
 import java.util.ArrayList;
 
