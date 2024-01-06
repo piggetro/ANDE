@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.ande.R;
+import com.example.ande.helpers.SessionManagement;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -14,6 +16,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SessionManagement sessionManagement = new SessionManagement(MainActivity.this);
+        int userId = sessionManagement.getSession();
+
+        Toast.makeText(MainActivity.this, "User ID" + userId, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

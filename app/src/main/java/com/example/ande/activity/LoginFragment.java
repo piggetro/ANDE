@@ -5,12 +5,19 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.ande.R;
+import com.example.ande.helpers.DBHandler;
+import com.example.ande.helpers.SessionManagement;
+import com.example.ande.model.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +34,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private DBHandler dbHandler;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -67,14 +76,46 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Button signInButton = view.findViewById(R.id.signIn);
         signInButton.setOnClickListener(this);
 
+        dbHandler = new DBHandler(getContext());
+
         return view;
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.signIn) {
-            Intent intent = new Intent(v.getContext(), MainActivity.class);
-            startActivity(intent);
+    public void onClick(View view) {
+        EditText emailEditText = getView().findViewById(R.id.signInEmail);
+        EditText passwordEditText = getView().findViewById(R.id.signInPassword);
+
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
+        try {
+            if (view.getId() == R.id.signIn && !email.isEmpty() && !password.isEmpty()) {
+                if (isValidEmail(email)) {
+                    int user_id = dbHandler.loginUser(new User(email, password));
+                    if (user_id != -1) {
+                        Toast.makeText(getContext(), "User ID" + user_id, Toast.LENGTH_SHORT).show();
+                        SessionManagement sessionManagement = new SessionManagement(getContext());
+                        sessionManagement.saveSession(new User(user_id));
+                        emailEditText.getText().clear();
+                        passwordEditText.getText().clear();
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "Sign In Failed", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.ande.R;
+import com.example.ande.helpers.SessionManagement;
 
 public class SettingsPage extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,6 +21,11 @@ public class SettingsPage extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == R.id.settingsPageBackButton) {
             Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else if (v.getId() == R.id.logout || v.getId() == R.id.logoutIcon) {
+            SessionManagement sessionManagement = new SessionManagement(SettingsPage.this);
+            sessionManagement.removeSession();
+            Intent intent = new Intent(this, LoginSignupPage.class);
             startActivity(intent);
         }
     }
