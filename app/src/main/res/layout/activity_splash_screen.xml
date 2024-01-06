@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/splashscreen_bg"
     app:layoutDescription="@xml/activity_splash_screen_scene2"
-    tools:context=".Splash">
+    tools:context=".activity.Splash">
 
     <ImageView
         android:id="@+id/moodeaseWords"
