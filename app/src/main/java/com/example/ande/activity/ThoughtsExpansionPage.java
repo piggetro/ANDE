@@ -73,21 +73,15 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             }
         });
 
-        addThoughtButton = findViewById(R.id.addThoughtButton);
-        isAllFabsVisible = false;
-
-        addThoughtButton.setOnClickListener(view -> {
-            Toast.makeText(ThoughtsExpansionPage.this, "Add Thought Button Click", Toast.LENGTH_SHORT
-            ).show();
-        });
-
-
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.thoughtsExpansionPageBackButton) {
             Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else if (v.getId() == R.id.addThoughtFloatingActionButton) {
+            Intent intent = new Intent(this, AddThoughtPage.class);
             startActivity(intent);
         }
     }
