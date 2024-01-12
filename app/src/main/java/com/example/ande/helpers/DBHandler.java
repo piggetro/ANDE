@@ -40,6 +40,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_USER_THOUGHTS_USER_ID = "user_id";
     private static final String KEY_USER_THOUGHTS_THOUGHTS = "thoughts";
     private static final String KEY_USER_THOUGHTS_DATE = "date";
+    private static final String KEY_USER_THOUGHTS_TIME = "time";
 
     private static final String TABLE_USER_MOOD = "user_mood";
     private static final String KEY_USER_MOOD_ID = "user_mood_id";
@@ -92,6 +93,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 KEY_USER_THOUGHTS_USER_ID + " INTEGER, " +
                 KEY_USER_THOUGHTS_THOUGHTS + " TEXT, " +
                 KEY_USER_THOUGHTS_DATE + " TEXT DEFAULT (strftime('%m/%d/%Y', 'now', 'localtime')), " +
+                KEY_USER_THOUGHTS_TIME + " TEXT DEFAULT (strftime('%H:%M:%S', 'now', 'localtime')), " +
                 "FOREIGN KEY (" + KEY_USER_THOUGHTS_USER_ID + ") REFERENCES user(" + KEY_USER_ID + ")" +
                 ");";
 
@@ -212,5 +214,18 @@ public class DBHandler extends SQLiteOpenHelper {
         return thoughtsList;
     }
 
+
+
+    public void addThought(int userId, String thoughts) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_THOUGHTS_USER_ID, userId);
+        cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughts);
+
+        sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
+
+        sqLiteDatabase.close();
+    }
 
 }

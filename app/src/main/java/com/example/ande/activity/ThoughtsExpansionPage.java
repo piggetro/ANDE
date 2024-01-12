@@ -16,10 +16,10 @@ import android.widget.Toast;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
+import com.example.ande.helpers.DateConverter;
 import com.example.ande.helpers.SessionManagement;
 import com.example.ande.helpers.ThoughtRecylerItemArrayAdapter;
 import com.example.ande.model.ThoughtRecyclerItem;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -27,14 +27,10 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 
     DBHandler db = new DBHandler(this);
     String selectedAbbreviatedMonthDate;
-    String selectedDate;
+    String convertedDate;
     String[] sortByDropDownItems = {"Earliest", "Latest"};
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> sortByDropDownAdapter;
-
-    FloatingActionButton addThoughtButton;
-    Boolean isAllFabsVisible;
-
     private RecyclerView mRecyclerView;
     private ArrayList<ThoughtRecyclerItem> mThoughts = new ArrayList<>();
 
@@ -47,7 +43,8 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         Intent intent = getIntent();
         if (intent != null) {
             selectedAbbreviatedMonthDate = intent.getStringExtra("abbreviatedDate");
-            selectedDate = intent.getStringExtra("date");
+            String selectedDate = intent.getStringExtra("date");
+            convertedDate = DateConverter.convertToMMddyyyyFormat(selectedDate);
 
             TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateDateText);
             abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
@@ -55,7 +52,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
             int userId = sessionManagement.getSession();
 
-            ArrayList<ThoughtRecyclerItem> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, selectedDate);
+            ArrayList<ThoughtRecyclerItem> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
 
             mThoughts.addAll(thoughtsFromDb);
         }
