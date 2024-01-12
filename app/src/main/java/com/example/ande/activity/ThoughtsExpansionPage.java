@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ande.R;
@@ -20,6 +21,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnClickListener {
+
+    String selectedAbbreviatedMonthDate;
+    String selectedDate;
 
     String[] sortByDropDownItems = {"Earliest", "Latest"};
     AutoCompleteTextView autoCompleteTextView;
@@ -36,6 +40,18 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thoughts_expansion_page);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            selectedAbbreviatedMonthDate = intent.getStringExtra("abbreviatedDate");
+            selectedDate = intent.getStringExtra("date");
+
+            TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateDateText);
+            TextView dateTextView = findViewById(R.id.dateTextView);
+
+            abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
+        }
+
         bindThoughtsData();
         setUIRef();
 

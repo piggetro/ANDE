@@ -15,6 +15,7 @@ import java.util.Calendar;
 
 public class CalendarPage extends AppCompatActivity implements  View.OnClickListener {
     String selectedAbbreviatedMonthDate;
+    String selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                String selectedDate = dayOfMonth + " " + getMonthName(month) + " " + year;
+                selectedDate = dayOfMonth + " " + getMonthName(month) + " " + year;
                 selectedAbbreviatedMonthDate = dayOfMonth + " " + getAbbreviatedMonthName(month) + " " + year;
                 String selectedDateWithouthYear = dayOfMonth + " " + getMonthName(month);
                 dateTextView.setText(selectedDateWithouthYear);
@@ -71,6 +72,7 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
             startActivity(intent);
         } else if (v.getId() == R.id.calendarThoughts || v.getId() == R.id.viewMoreCalendar) {
             Intent intent = new Intent(this, ThoughtsExpansionPage.class);
+            intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
             intent.putExtra("date", selectedAbbreviatedMonthDate);
             startActivity(intent);
         }
