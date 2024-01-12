@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ande.R;
-import com.example.ande.activity.ThoughtRecyclerItem;
+import com.example.ande.model.ThoughtRecyclerItem;
 
 import java.util.ArrayList;
 

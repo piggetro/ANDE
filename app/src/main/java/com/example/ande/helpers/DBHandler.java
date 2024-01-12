@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
+import com.example.ande.model.ThoughtRecyclerItem;
 import com.example.ande.model.User;
+
+import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -179,4 +180,37 @@ public class DBHandler extends SQLiteOpenHelper {
             return -1;
         }
     }
+
+    public ArrayList<ThoughtRecyclerItem> getThoughtsByUserIdAndDate(int userId, String date) {
+        ArrayList<ThoughtRecyclerItem> thoughtsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {KEY_USER_THOUGHTS_ID, KEY_USER_THOUGHTS_THOUGHTS};  // Include the ID column if needed
+        String selection = KEY_USER_THOUGHTS_USER_ID + " = ? AND " + KEY_USER_THOUGHTS_DATE + " = ?";
+        String[] selectionArgs = {String.valueOf(userId), date};
+        String orderBy = null;
+
+        Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy);
+
+        if (cursor != null) {
+            int idIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_ID);
+            int thoughtsIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_THOUGHTS);
+
+            while (cursor.moveToNext()) {
+                if (idIndex != -1 && thoughtsIndex != -1) {
+                    String thoughtId = cursor.getString(idIndex);
+                    String thoughtText = cursor.getString(thoughtsIndex);
+                    thoughtsList.add(new ThoughtRecyclerItem(thoughtId, thoughtText));
+                } else {
+                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                }
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return thoughtsList;
+    }
+
+
 }

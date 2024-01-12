@@ -1,4 +1,4 @@
-package com.example.ande.activity;
+package com.example.ande.model;
 
 public class ThoughtRecyclerItem {
     private String thoughtId;

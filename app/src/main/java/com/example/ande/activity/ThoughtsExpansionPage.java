@@ -15,16 +15,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ande.R;
+import com.example.ande.helpers.DBHandler;
+import com.example.ande.helpers.SessionManagement;
 import com.example.ande.helpers.ThoughtRecylerItemArrayAdapter;
+import com.example.ande.model.ThoughtRecyclerItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnClickListener {
 
+    DBHandler db = new DBHandler(this);
     String selectedAbbreviatedMonthDate;
     String selectedDate;
-
     String[] sortByDropDownItems = {"Earliest", "Latest"};
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> sortByDropDownAdapter;
@@ -47,12 +50,16 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             selectedDate = intent.getStringExtra("date");
 
             TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateDateText);
-            TextView dateTextView = findViewById(R.id.dateTextView);
-
             abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
+
+            SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
+            int userId = sessionManagement.getSession();
+
+            ArrayList<ThoughtRecyclerItem> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, selectedDate);
+
+            mThoughts.addAll(thoughtsFromDb);
         }
 
-        bindThoughtsData();
         setUIRef();
 
         autoCompleteTextView = findViewById(R.id.auto_complete_text_view);
@@ -108,25 +115,6 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 
         //Set adapter to RecyclerView
         mRecyclerView.setAdapter(myRecyclerViewAdapter);
-    }
-
-    private void bindThoughtsData() {
-        mThoughts.add(new ThoughtRecyclerItem("1", "i love life"));
-        mThoughts.add(new ThoughtRecyclerItem("2", "i like ice cream"));
-        mThoughts.add(new ThoughtRecyclerItem("3", "i love INC"));
-        mThoughts.add(new ThoughtRecyclerItem("4", "Today is a beautiful day"));
-        mThoughts.add(new ThoughtRecyclerItem("5", "Coding is fun"));
-        mThoughts.add(new ThoughtRecyclerItem("6", "Nature is amazing"));
-        mThoughts.add(new ThoughtRecyclerItem("7", "Music brings joy"));
-        mThoughts.add(new ThoughtRecyclerItem("8", "Learning new things is exciting"));
-        mThoughts.add(new ThoughtRecyclerItem("9", "Coffee helps me focus"));
-        mThoughts.add(new ThoughtRecyclerItem("10", "Kindness matters"));
-        mThoughts.add(new ThoughtRecyclerItem("11", "Books open new worlds"));
-        mThoughts.add(new ThoughtRecyclerItem("12", "Exercise is good for the body"));
-        mThoughts.add(new ThoughtRecyclerItem("13", "Family time is precious"));
-        mThoughts.add(new ThoughtRecyclerItem("14", "Creativity knows no bounds"));
-        mThoughts.add(new ThoughtRecyclerItem("15", "The sun always shines after the rain"));
-        mThoughts.add(new ThoughtRecyclerItem("16", "Challenges make us stronger"));
     }
 
 
