@@ -55,6 +55,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             ArrayList<Thought> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
 
             mThoughts.addAll(thoughtsFromDb);
+            setThoughtPosition("Earliest");
         }
 
         setUIRef();
@@ -120,8 +121,25 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         } else {
             mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByEarliest(userId, convertedDate));
         }
+        setThoughtPosition(sortOrder);
+
+        if (mRecyclerView.getAdapter() == null) {
+            setUIRef();
+        }
 
         mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    private void setThoughtPosition(String orderBy) {
+        if (orderBy.equals("Latest")) {
+            for (int i = mThoughts.size() - 1; i >= 0; i--) {
+                mThoughts.get(i).setPosition(mThoughts.size() - i);
+            }
+        } else {
+            for (int i = 0; i < mThoughts.size(); i++) {
+                mThoughts.get(i).setPosition(i + 1);
+            }
+        }
     }
 
 

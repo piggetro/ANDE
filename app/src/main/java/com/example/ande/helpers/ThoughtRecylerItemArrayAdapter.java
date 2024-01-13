@@ -45,7 +45,7 @@ public class ThoughtRecylerItemArrayAdapter extends RecyclerView.Adapter<Thought
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.thoughtId.setText("#" + (position + 1));
+        holder.thoughtId.setText("#" + mThoughts.get(position).getPosition());
 
         String thought = mThoughts.get(position).getThoughtText();
         holder.thoughtText.setText(thought);

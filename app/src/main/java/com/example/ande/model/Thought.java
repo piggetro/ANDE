@@ -6,6 +6,7 @@ public class Thought {
     private String thoughtText;
     private String date;
     private String time;
+    private int position;
 
     public Thought() {
     }
@@ -61,5 +62,14 @@ public class Thought {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }
