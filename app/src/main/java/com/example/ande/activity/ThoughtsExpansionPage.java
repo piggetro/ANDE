@@ -27,6 +27,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 
     DBHandler db = new DBHandler(this);
     String selectedAbbreviatedMonthDate;
+    String selectedDate;
     String convertedDate;
     String[] sortByDropDownItems = {"Earliest", "Latest"};
     AutoCompleteTextView autoCompleteTextView;
@@ -43,7 +44,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         Intent intent = getIntent();
         if (intent != null) {
             selectedAbbreviatedMonthDate = intent.getStringExtra("abbreviatedDate");
-            String selectedDate = intent.getStringExtra("date");
+            selectedDate = intent.getStringExtra("date");
             convertedDate = DateConverter.convertToMMddyyyyFormat(selectedDate);
 
             TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateDateText);
@@ -80,6 +81,8 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             startActivity(intent);
         } else if (v.getId() == R.id.addThoughtFloatingActionButton) {
             Intent intent = new Intent(this, AddThoughtPage.class);
+            intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
+            intent.putExtra("date", selectedDate);
             startActivity(intent);
         }
     }
@@ -100,7 +103,18 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         {
             @Override
             public void onItemClicked(Thought thought) {
-                Toast.makeText(ThoughtsExpansionPage.this, thought.getThoughtText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ThoughtsExpansionPage.this, "Thought #" + thought.getPosition() + ": " + thought.getThoughtText(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onEditIconClicked(Thought thought) {
+                Intent intent = new Intent(ThoughtsExpansionPage.this, EditThoughtPage.class);
+                intent.putExtra("thoughtId", thought.getThoughtId());
+                intent.putExtra("thoughtText", thought.getThoughtText());
+                intent.putExtra("thoughtPosition", thought.getPosition());
+                intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
+                intent.putExtra("date", selectedDate);
+                startActivity(intent);
             }
 
         });

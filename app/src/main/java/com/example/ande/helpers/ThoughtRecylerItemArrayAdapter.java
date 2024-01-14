@@ -3,6 +3,7 @@ package com.example.ande.helpers;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -70,16 +71,29 @@ public class ThoughtRecylerItemArrayAdapter extends RecyclerView.Adapter<Thought
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView thoughtId;
         private TextView thoughtText;
+        private ImageView editThoughtIcon;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
             thoughtId = itemView.findViewById(R.id.thoughtId);
             thoughtText = itemView.findViewById(R.id.thoughtText);
+            editThoughtIcon = itemView.findViewById(R.id.editThoughtIcon);
+
+            editThoughtIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onEditIconClicked(mThoughts.get(getAdapterPosition()));
+                    }
+                }
+            });
         }
     }
+
 
     // RecyclerView Click Listener
     public interface MyRecyclerViewItemClickListener {
         void onItemClicked(Thought thought);
+        void onEditIconClicked(Thought thought);
     }
 }

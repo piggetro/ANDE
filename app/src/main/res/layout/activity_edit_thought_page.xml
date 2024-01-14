@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AddThoughtPage"
+    tools:context=".activity.EditThoughtPage"
     android:background="@drawable/splashscreen_bg">
 
     <LinearLayout
@@ -18,7 +18,7 @@
         tools:layout_editor_absoluteX="-117dp"
         tools:layout_editor_absoluteY="117dp">
         <ImageView
-            android:id="@+id/addThoughtPageBackButton"
+            android:id="@+id/editThoughtPageBackButton"
             android:onClick="onClick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,10 +26,10 @@
             app:srcCompat="@drawable/arrow_back" />
 
         <TextView
-            android:id="@+id/addThoughtHeader"
+            android:id="@+id/editThoughtHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="What's on your mind...?"
+            android:text="Edit thought"
             android:fontFamily="@font/barlow_bold"
             android:textColor="#FFFFFF"
             android:textSize="21dp" />
@@ -47,7 +47,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/add_edit_thought_text_area"
-                android:hint="Write your thought here..."
+                android:hint="What's on your mind...?"
                 android:inputType="textMultiLine"
                 android:lines="5"
                 android:maxLines="5"
@@ -58,7 +58,7 @@
                 android:textSize="16dp" />
 
             <Button
-                android:id="@+id/addThoughtSubmitButton"
+                android:id="@+id/editThoughtSubmitButton"
                 android:onClick="onClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/add_edit_thought_submit_button"
                 android:elevation="4dp"
-                android:text="Add!"
+                android:text="Change"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
