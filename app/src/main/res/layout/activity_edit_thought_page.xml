@@ -41,7 +41,7 @@
             android:background="@drawable/add_edit_thought_relative_layout">
 
             <EditText
-                android:id="@+id/addThoughtTextArea"
+                android:id="@+id/editThoughtTextArea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

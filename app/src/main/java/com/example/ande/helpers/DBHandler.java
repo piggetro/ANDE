@@ -288,4 +288,18 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.close();
     }
 
+    public void updateThought(String thoughtId, String thoughtText) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughtText);
+
+        String whereClause = KEY_USER_THOUGHTS_ID + " = ?";
+        String[] whereArgs = {thoughtId};
+
+        sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
+
+        sqLiteDatabase.close();
+    }
+
 }

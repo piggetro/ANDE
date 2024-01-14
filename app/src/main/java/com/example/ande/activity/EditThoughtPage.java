@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -16,6 +17,8 @@ public class EditThoughtPage extends AppCompatActivity implements View.OnClickLi
     DBHandler db = new DBHandler(this);
     String selectedAbbreviatedMonthDate;
     String selectedDate;
+    String thoughtId;
+    String thoughtText;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -25,12 +28,14 @@ public class EditThoughtPage extends AppCompatActivity implements View.OnClickLi
 
         Intent intent = getIntent();
         if (intent != null) {
-            String thoughtId = intent.getStringExtra("thoughtId");
-            String thoughtText = intent.getStringExtra("thoughtText");
+            thoughtId = intent.getStringExtra("thoughtId");
+            thoughtText = intent.getStringExtra("thoughtText");
             selectedAbbreviatedMonthDate = intent.getStringExtra("abbreviatedDate");
             selectedDate = intent.getStringExtra("date");
             int thoughtPosition = intent.getIntExtra("thoughtPosition", 0);
 
+            TextView thoughtEditText = findViewById(R.id.editThoughtTextArea);
+            thoughtEditText.setText(thoughtText);
 
             TextView editThoughtHeader = findViewById(R.id.editThoughtHeader);
             if (thoughtPosition == 0) {
@@ -50,6 +55,19 @@ public class EditThoughtPage extends AppCompatActivity implements View.OnClickLi
             intent.putExtra("date", selectedDate);
             startActivity(intent);
         } else if (v.getId() == R.id.editThoughtSubmitButton) {
+
+            TextView thoughtEditText = findViewById(R.id.editThoughtTextArea);
+            String thoughtText = thoughtEditText.getText().toString();
+
+            if (thoughtText.equals("")) {
+                Toast.makeText(this, "Thought cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!thoughtText.equals(this.thoughtText)) {
+                db.updateThought(thoughtId, thoughtText);
+            }
+
             Intent intent = new Intent(this, ThoughtsExpansionPage.class);
             intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
             intent.putExtra("date", selectedDate);
