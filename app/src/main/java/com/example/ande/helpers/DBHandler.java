@@ -286,6 +286,8 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
 
         sqLiteDatabase.close();
+
+        addPoint(userId, 100);
     }
 
     public void updateThought(String thoughtId, String thoughtText) {
@@ -300,6 +302,13 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
 
         sqLiteDatabase.close();
+    }
+
+    //add point to user_animal
+    public void addPoint(int userId, int Point) {
+
+        //logic to add point to user_animal
+
     }
 
 }
