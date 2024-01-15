@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.EditThoughtPage"
+    android:background="@drawable/splashscreen_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        tools:context=".SettingsActivity"
+        tools:layout_editor_absoluteX="-117dp"
+        tools:layout_editor_absoluteY="117dp">
+        <ImageView
+            android:id="@+id/editThoughtPageBackButton"
+            android:onClick="onClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:srcCompat="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/editThoughtHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit thought"
+            android:fontFamily="@font/barlow_bold"
+            android:textColor="#FFFFFF"
+            android:textSize="21dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="326dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/add_edit_thought_relative_layout">
+
+            <EditText
+                android:id="@+id/editThoughtTextArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/add_edit_thought_text_area"
+                android:hint="What's on your mind...?"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:maxLines="5"
+                android:minHeight="80dp"
+                android:padding="8dp"
+                android:textColor="#000000"
+                android:textColorHint="#C0C0C0"
+                android:textSize="16dp" />
+
+            <Button
+                android:id="@+id/editThoughtSubmitButton"
+                android:onClick="onClick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/add_edit_thought_submit_button"
+                android:elevation="4dp"
+                android:text="Change"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

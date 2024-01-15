@@ -11,32 +11,54 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ande.R;
+import com.example.ande.helpers.DBHandler;
+import com.example.ande.helpers.DateConverter;
+import com.example.ande.helpers.SessionManagement;
 import com.example.ande.helpers.ThoughtRecylerItemArrayAdapter;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.ande.model.Thought;
 
 import java.util.ArrayList;
 
 public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnClickListener {
 
+    DBHandler db = new DBHandler(this);
+    String selectedAbbreviatedMonthDate;
+    String selectedDate;
+    String convertedDate;
     String[] sortByDropDownItems = {"Earliest", "Latest"};
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> sortByDropDownAdapter;
-
-    FloatingActionButton addThoughtButton;
-    Boolean isAllFabsVisible;
-
     private RecyclerView mRecyclerView;
-    private ArrayList<ThoughtRecyclerItem> mThoughts = new ArrayList<>();
+    private ArrayList<Thought> mThoughts = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thoughts_expansion_page);
-        bindThoughtsData();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            selectedAbbreviatedMonthDate = intent.getStringExtra("abbreviatedDate");
+            selectedDate = intent.getStringExtra("date");
+            convertedDate = DateConverter.convertToMMddyyyyFormat(selectedDate);
+
+            TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateText);
+            abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
+
+            SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
+            int userId = sessionManagement.getSession();
+
+            ArrayList<Thought> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
+
+            mThoughts.addAll(thoughtsFromDb);
+            setThoughtPosition("Earliest");
+        }
+
         setUIRef();
 
         autoCompleteTextView = findViewById(R.id.auto_complete_text_view);
@@ -46,25 +68,21 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(ThoughtsExpansionPage.this, "Selected: " + item, Toast.LENGTH_SHORT).show();
+                sortThoughts(item);
             }
         });
-
-        addThoughtButton = findViewById(R.id.addThoughtButton);
-        isAllFabsVisible = false;
-
-        addThoughtButton.setOnClickListener(view -> {
-            Toast.makeText(ThoughtsExpansionPage.this, "Add Thought Button Click", Toast.LENGTH_SHORT
-            ).show();
-        });
-
 
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.thoughtsExpansionPageBackButton) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, CalendarPage.class);
+            startActivity(intent);
+        } else if (v.getId() == R.id.addThoughtFloatingActionButton) {
+            Intent intent = new Intent(this, AddThoughtPage.class);
+            intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
+            intent.putExtra("date", selectedDate);
             startActivity(intent);
         }
     }
@@ -84,8 +102,19 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         ThoughtRecylerItemArrayAdapter myRecyclerViewAdapter = new ThoughtRecylerItemArrayAdapter(mThoughts, new ThoughtRecylerItemArrayAdapter.MyRecyclerViewItemClickListener()
         {
             @Override
-            public void onItemClicked(ThoughtRecyclerItem thought) {
-                Toast.makeText(ThoughtsExpansionPage.this, thought.getThoughtText(), Toast.LENGTH_SHORT).show();
+            public void onItemClicked(Thought thought) {
+                Toast.makeText(ThoughtsExpansionPage.this, "Thought #" + thought.getPosition() + ": " + thought.getThoughtText(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onEditIconClicked(Thought thought) {
+                Intent intent = new Intent(ThoughtsExpansionPage.this, EditThoughtPage.class);
+                intent.putExtra("thoughtId", thought.getThoughtId());
+                intent.putExtra("thoughtText", thought.getThoughtText());
+                intent.putExtra("thoughtPosition", thought.getPosition());
+                intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
+                intent.putExtra("date", selectedDate);
+                startActivity(intent);
             }
 
         });
@@ -94,24 +123,39 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         mRecyclerView.setAdapter(myRecyclerViewAdapter);
     }
 
-    private void bindThoughtsData() {
-        mThoughts.add(new ThoughtRecyclerItem("1", "i love life"));
-        mThoughts.add(new ThoughtRecyclerItem("2", "i like ice cream"));
-        mThoughts.add(new ThoughtRecyclerItem("3", "i love INC"));
-        mThoughts.add(new ThoughtRecyclerItem("4", "Today is a beautiful day"));
-        mThoughts.add(new ThoughtRecyclerItem("5", "Coding is fun"));
-        mThoughts.add(new ThoughtRecyclerItem("6", "Nature is amazing"));
-        mThoughts.add(new ThoughtRecyclerItem("7", "Music brings joy"));
-        mThoughts.add(new ThoughtRecyclerItem("8", "Learning new things is exciting"));
-        mThoughts.add(new ThoughtRecyclerItem("9", "Coffee helps me focus"));
-        mThoughts.add(new ThoughtRecyclerItem("10", "Kindness matters"));
-        mThoughts.add(new ThoughtRecyclerItem("11", "Books open new worlds"));
-        mThoughts.add(new ThoughtRecyclerItem("12", "Exercise is good for the body"));
-        mThoughts.add(new ThoughtRecyclerItem("13", "Family time is precious"));
-        mThoughts.add(new ThoughtRecyclerItem("14", "Creativity knows no bounds"));
-        mThoughts.add(new ThoughtRecyclerItem("15", "The sun always shines after the rain"));
-        mThoughts.add(new ThoughtRecyclerItem("16", "Challenges make us stronger"));
+
+    private void sortThoughts(String sortOrder) {
+        SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
+        int userId = sessionManagement.getSession();
+
+        mThoughts.clear();
+
+        if (sortOrder.equals("Latest")) {
+            mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByLatest(userId, convertedDate));
+        } else {
+            mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByEarliest(userId, convertedDate));
+        }
+        setThoughtPosition(sortOrder);
+
+        if (mRecyclerView.getAdapter() == null) {
+            setUIRef();
+        }
+
+        mRecyclerView.getAdapter().notifyDataSetChanged();
     }
+
+    private void setThoughtPosition(String orderBy) {
+        if (orderBy.equals("Latest")) {
+            for (int i = mThoughts.size() - 1; i >= 0; i--) {
+                mThoughts.get(i).setPosition(mThoughts.size() - i);
+            }
+        } else {
+            for (int i = 0; i < mThoughts.size(); i++) {
+                mThoughts.get(i).setPosition(i + 1);
+            }
+        }
+    }
+
 
 
 }

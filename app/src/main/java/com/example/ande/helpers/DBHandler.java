@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
+import com.example.ande.model.Thought;
 import com.example.ande.model.User;
+
+import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -39,6 +40,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_USER_THOUGHTS_USER_ID = "user_id";
     private static final String KEY_USER_THOUGHTS_THOUGHTS = "thoughts";
     private static final String KEY_USER_THOUGHTS_DATE = "date";
+    private static final String KEY_USER_THOUGHTS_TIME = "time";
 
     private static final String TABLE_USER_MOOD = "user_mood";
     private static final String KEY_USER_MOOD_ID = "user_mood_id";
@@ -91,6 +93,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 KEY_USER_THOUGHTS_USER_ID + " INTEGER, " +
                 KEY_USER_THOUGHTS_THOUGHTS + " TEXT, " +
                 KEY_USER_THOUGHTS_DATE + " TEXT DEFAULT (strftime('%m/%d/%Y', 'now', 'localtime')), " +
+                KEY_USER_THOUGHTS_TIME + " TEXT DEFAULT (strftime('%H:%M:%S', 'now', 'localtime')), " +
                 "FOREIGN KEY (" + KEY_USER_THOUGHTS_USER_ID + ") REFERENCES user(" + KEY_USER_ID + ")" +
                 ");";
 
@@ -179,4 +182,133 @@ public class DBHandler extends SQLiteOpenHelper {
             return -1;
         }
     }
+
+    public ArrayList<Thought> getThoughtsByUserIdAndDate(int userId, String date) {
+        ArrayList<Thought> thoughtsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {KEY_USER_THOUGHTS_ID, KEY_USER_THOUGHTS_THOUGHTS};
+        String selection = KEY_USER_THOUGHTS_USER_ID + " = ? AND " + KEY_USER_THOUGHTS_DATE + " = ?";
+        String[] selectionArgs = {String.valueOf(userId), date};
+        String orderBy = null;
+
+        Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy);
+
+        if (cursor != null) {
+            int idIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_ID);
+            int thoughtsIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_THOUGHTS);
+
+            while (cursor.moveToNext()) {
+                if (idIndex != -1 && thoughtsIndex != -1) {
+                    String thoughtId = cursor.getString(idIndex);
+                    String thoughtText = cursor.getString(thoughtsIndex);
+                    thoughtsList.add(new Thought(thoughtId, thoughtText));
+                } else {
+                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                }
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return thoughtsList;
+    }
+
+    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByLatest(int userId, String date) {
+        ArrayList<Thought> thoughtsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {KEY_USER_THOUGHTS_ID, KEY_USER_THOUGHTS_THOUGHTS};
+        String selection = KEY_USER_THOUGHTS_USER_ID + " = ? AND " + KEY_USER_THOUGHTS_DATE + " = ?";
+        String[] selectionArgs = {String.valueOf(userId), date};
+        String orderBy = KEY_USER_THOUGHTS_TIME + " DESC";
+
+        Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy);
+
+        if (cursor != null) {
+            int idIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_ID);
+            int thoughtsIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_THOUGHTS);
+
+            while (cursor.moveToNext()) {
+                if (idIndex != -1 && thoughtsIndex != -1) {
+                    String thoughtId = cursor.getString(idIndex);
+                    String thoughtText = cursor.getString(thoughtsIndex);
+                    thoughtsList.add(new Thought(thoughtId, thoughtText));
+                } else {
+                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                }
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return thoughtsList;
+    }
+
+    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByEarliest(int userId, String date) {
+        ArrayList<Thought> thoughtsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {KEY_USER_THOUGHTS_ID, KEY_USER_THOUGHTS_THOUGHTS};
+        String selection = KEY_USER_THOUGHTS_USER_ID + " = ? AND " + KEY_USER_THOUGHTS_DATE + " = ?";
+        String[] selectionArgs = {String.valueOf(userId), date};
+        String orderBy = KEY_USER_THOUGHTS_TIME + " ASC";
+
+        Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy);
+
+        if (cursor != null) {
+            int idIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_ID);
+            int thoughtsIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_THOUGHTS);
+
+            while (cursor.moveToNext()) {
+                if (idIndex != -1 && thoughtsIndex != -1) {
+                    String thoughtId = cursor.getString(idIndex);
+                    String thoughtText = cursor.getString(thoughtsIndex);
+                    thoughtsList.add(new Thought(thoughtId, thoughtText));
+                } else {
+                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                }
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return thoughtsList;
+    }
+
+    public void addThought(int userId, String thoughts) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_THOUGHTS_USER_ID, userId);
+        cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughts);
+
+        sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
+
+        sqLiteDatabase.close();
+
+        addPoint(userId, 100);
+    }
+
+    public void updateThought(String thoughtId, String thoughtText) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughtText);
+
+        String whereClause = KEY_USER_THOUGHTS_ID + " = ?";
+        String[] whereArgs = {thoughtId};
+
+        sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
+
+        sqLiteDatabase.close();
+    }
+
+    //add point to user_animal
+    public void addPoint(int userId, int Point) {
+
+        //logic to add point to user_animal
+
+    }
+
 }
