@@ -47,7 +47,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             selectedDate = intent.getStringExtra("date");
             convertedDate = DateConverter.convertToMMddyyyyFormat(selectedDate);
 
-            TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateDateText);
+            TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateText);
             abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
 
             SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
