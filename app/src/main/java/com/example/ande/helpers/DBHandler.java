@@ -311,4 +311,83 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public void addMood(int userId, String mood) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_MOOD_USER_ID, userId);
+        cv.put(KEY_USER_MOOD_MOOD, mood);
+
+        sqLiteDatabase.insert(TABLE_USER_MOOD, null, cv);
+
+        sqLiteDatabase.close();
+    }
+
+    public String getMood(int userId, String date) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Log.e("mood", "getMood: " + date);
+        String query = "SELECT * FROM " + TABLE_USER_MOOD + " WHERE " + KEY_USER_MOOD_USER_ID + " = " + userId + " AND " + KEY_USER_MOOD_DATE + " = '" + date + "';";
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(KEY_USER_MOOD_MOOD);
+            String mood = cursor.getString(columnIndex);
+
+            return mood;
+
+        } else {
+            return "";
+        }
+    }
+
+    public String getLatestThought(int userId, String date) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        // Query to retrieve the latest thought for the specified date
+        String query = "SELECT " + KEY_USER_THOUGHTS_THOUGHTS +
+                " FROM " + TABLE_USER_THOUGHTS +
+                " WHERE " + KEY_USER_THOUGHTS_USER_ID + " = '" + userId + "'" +
+                " AND " + KEY_USER_THOUGHTS_DATE + " = '" + date + "'" +
+                " ORDER BY " + KEY_USER_THOUGHTS_TIME + " DESC" +
+                " LIMIT 1;";
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_THOUGHTS);
+            String latestThought = cursor.getString(columnIndex);
+
+            return latestThought;
+        } else {
+            return "";
+        }
+    }
+
+    public String getMeditationTime (int userId, String date) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        // Query to retrieve the total meditation time for the specified date
+        String query = "SELECT SUM(" + KEY_USER_MEDITATION_MINUTES + ") AS totalMeditationTime" +
+                " FROM " + TABLE_USER_MEDITATION +
+                " WHERE " + KEY_USER_MEDITATION_USER_ID + " = '" + userId + "'" +
+                " AND " + KEY_USER_MEDITATION_DATE + " = '" + date + "';";
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("totalMeditationTime");
+            int totalMeditationTime = cursor.getInt(columnIndex);
+
+
+
+            return Integer.toString(totalMeditationTime);
+        } else {
+
+            return "0";
+        }
+    }
+
+
 }

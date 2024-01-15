@@ -40,17 +40,19 @@
             android:shadowRadius="6" />
 
         <ImageView
+            android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_marginTop="-120dp"
-            app:srcCompat="@drawable/homepage_emoji" />
+            android:layout_height="230dp"
+            app:srcCompat="@drawable/homepage_emoji"
+            android:onClick="onClick"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_marginTop="-150dp"
             android:gravity="center">
 
             <LinearLayout
@@ -63,7 +65,7 @@
                 <ImageView
                     android:id="@+id/farmButton"
                     android:layout_width="196dp"
-                    android:layout_height="381dp"
+                    android:layout_height="380dp"
                     android:layout_gravity="center"
                     android:adjustViewBounds="false"
                     android:cropToPadding="false"
