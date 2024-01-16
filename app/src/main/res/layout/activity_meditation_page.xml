@@ -99,7 +99,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/meditationPauseButton"
             android:layout_width="330dp"
             android:layout_height="48dp"
             android:background="@drawable/meditation_pause_button"
