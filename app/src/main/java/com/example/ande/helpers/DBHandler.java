@@ -119,6 +119,17 @@ public class DBHandler extends SQLiteOpenHelper {
                 "('Rabbit', 200), " +
                 "('Cow', 300);";
 
+        //TODO: ONLY FOR TESTING. Remove this after testing
+        String multiRowInsertUser = "INSERT INTO " + TABLE_USER + " (" + KEY_USER_EMAIL + ", " + KEY_USER_USERNAME + ", " + KEY_USER_PASSWORD + ") VALUES " +
+                "('t@gmail.com', 't', 't'), " +
+                "('t2@gmail.com', 't', 't');";
+
+        //TODO: ONLY FOR TESTING. Remove this after testing
+        String multiRowInsertUserAnimal = "INSERT INTO " + TABLE_USER_ANIMAL + " (" + KEY_USER_ANIMAL_USER_ID + ", " + KEY_USER_ANIMAL_ANIMAL_ID + ", " + KEY_USER_ANIMAL_POINT + ", " + KEY_USER_ANIMAL_ISACTIVE + ") VALUES " +
+                "(1, 1, 0, 0), " +  // User 1, Animal 1 (Pig), Points 0, Inactive
+                "(1, 2, 0, 0), " +  // User 1, Animal 2 (Rabbit), Points 0, Inactive
+                "(1, 3, 0, 1);";   // User 1, Animal 3 (Cow), Points 0, Active
+
         sqLiteDatabase.execSQL(CREATE_TABLE_USER);
         sqLiteDatabase.execSQL(CREATE_TABLE_ANIMAL);
         sqLiteDatabase.execSQL(CREATE_TABLE_USER_ANIMAL);
@@ -126,8 +137,13 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_USER_MOOD);
         sqLiteDatabase.execSQL(CREATE_TABLE_USER_MEDITATION);
 
+
         sqLiteDatabase.execSQL(multiRowInsert);
 
+        //TODO: ONLY FOR TESTING. Remove this after testing
+        sqLiteDatabase.execSQL(multiRowInsertUser);
+        //TODO: ONLY FOR TESTING. Remove this after testing
+        sqLiteDatabase.execSQL(multiRowInsertUserAnimal);
     }
 
     @Override
@@ -285,9 +301,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
         sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
 
-        sqLiteDatabase.close();
+        addPointsToUserAnimal(userId, 20);
 
-        addPoint(userId, 100);
+        sqLiteDatabase.close();
     }
 
     public void updateThought(String thoughtId, String thoughtText) {
@@ -305,11 +321,66 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //add point to user_animal
-    public void addPoint(int userId, int Point) {
+    public void addPointsToUserAnimal(int userId, int points) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
-        //logic to add point to user_animal
+        String[] columns = {KEY_USER_ANIMAL_ANIMAL_ID, KEY_USER_ANIMAL_POINT, KEY_USER_ANIMAL_ISACTIVE};
+        String selection = KEY_USER_ANIMAL_USER_ID + " = ? AND " + KEY_USER_ANIMAL_ISACTIVE + " = 1";
+        String[] selectionArgs = {String.valueOf(userId)};
 
+        Cursor cursor = sqLiteDatabase.query(TABLE_USER_ANIMAL, columns, selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int animalIdColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_ANIMAL_ID);
+            int pointsColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_POINT);
+
+            if (animalIdColumnIndex != -1 && pointsColumnIndex != -1) {
+                int animalId = cursor.getInt(animalIdColumnIndex);
+                int currentPoints = cursor.getInt(pointsColumnIndex);
+
+                int maxPoints = getAnimalMaxPoints(animalId);
+
+                int newTotalPoints = Math.min(currentPoints + points, maxPoints);
+
+                ContentValues cv = new ContentValues();
+                cv.put(KEY_USER_ANIMAL_POINT, newTotalPoints);
+
+                String whereClause = KEY_USER_ANIMAL_USER_ID + " = ? AND " + KEY_USER_ANIMAL_ANIMAL_ID + " = ?";
+                String[] whereArgs = {String.valueOf(userId), String.valueOf(animalId)};
+
+                sqLiteDatabase.update(TABLE_USER_ANIMAL, cv, whereClause, whereArgs);
+            } else {
+                Log.e("DBHandler", "Column not found: " + KEY_USER_ANIMAL_ANIMAL_ID + " or " + KEY_USER_ANIMAL_POINT);
+            }
+        }
+
+        cursor.close();
+        sqLiteDatabase.close();
     }
+
+    private int getAnimalMaxPoints(int animalId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {KEY_ANIMAL_MAX};
+        String selection = KEY_ANIMAL_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(animalId)};
+
+        Cursor cursor = db.query(TABLE_ANIMAL, columns, selection, selectionArgs, null, null, null);
+
+        int maxPoints = 0;
+
+        if (cursor.moveToFirst()) {
+            int maxPointsIndex = cursor.getColumnIndex(KEY_ANIMAL_MAX);
+            if (maxPointsIndex != -1) {
+                maxPoints = cursor.getInt(maxPointsIndex);
+            }
+        }
+
+        cursor.close();
+
+        return maxPoints;
+    }
+
 
     public void addMood(int userId, String mood) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
