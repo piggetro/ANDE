@@ -156,16 +156,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetlayout_meditationpage_options);
 
-        AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.auto_complete_text_view);
-        autoCompleteTextView.setFocusable(false);
-        autoCompleteTextView.setFocusableInTouchMode(false);
-        autoCompleteTextView.setInputType(InputType.TYPE_NULL);
+        AutoCompleteTextView autoCompleteTypeTextView = dialog.findViewById(R.id.auto_complete_meditation_type_text_view);
+        autoCompleteTypeTextView.setFocusable(false);
+        autoCompleteTypeTextView.setFocusableInTouchMode(false);
+        autoCompleteTypeTextView.setInputType(InputType.TYPE_NULL);
 
-        String[] meditationOptions = {"5 Minutes", "10 Minutes", "20 Minutes"};
+        String[] meditationTypeOptions = {"Guided Meditation", "Meditation Music"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_list_meditation_options, meditationOptions);
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, R.layout.dropdown_list_meditation_options, meditationTypeOptions);
 
-        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTypeTextView.setAdapter(typeAdapter);
+
+
+        AutoCompleteTextView autoCompleteMinutesTextView = dialog.findViewById(R.id.auto_complete_meditation_minutes_text_view);
+        autoCompleteMinutesTextView.setFocusable(false);
+        autoCompleteMinutesTextView.setFocusableInTouchMode(false);
+        autoCompleteMinutesTextView.setInputType(InputType.TYPE_NULL);
+
+        String[] meditationMinutesOptions = {"5 Minutes", "10 Minutes", "20 Minutes"};
+
+        ArrayAdapter<String> minutesAdapter = new ArrayAdapter<>(this, R.layout.dropdown_list_meditation_options, meditationMinutesOptions);
+
+        autoCompleteMinutesTextView.setAdapter(minutesAdapter);
+
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
