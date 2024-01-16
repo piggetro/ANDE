@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottomsheetlayout);
+        dialog.setContentView(R.layout.bottomsheetlayout_homepage_emoji);
 
         LinearLayout happyLayout = dialog.findViewById(R.id.happyOption);
         LinearLayout sadLayout = dialog.findViewById(R.id.sadOption);

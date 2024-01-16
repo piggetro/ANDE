@@ -5,14 +5,20 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -41,6 +47,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thoughts_expansion_page);
 
+
         Intent intent = getIntent();
         if (intent != null) {
             selectedAbbreviatedMonthDate = intent.getStringExtra("abbreviatedDate");
@@ -50,11 +57,25 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateText);
             abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
 
+            ImageView moodView = (ImageView) findViewById(R.id.thoughtsExpansionPageMoodImage);
             SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
             int userId = sessionManagement.getSession();
 
-            ArrayList<Thought> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
+            String mood = db.getMood(userId, convertedDate);
 
+            if (mood.equals("happy")) {
+                moodView.setImageResource(R.drawable.happy);
+            } else if (mood.equals("sad")) {
+                moodView.setImageResource(R.drawable.sad);
+            } else if (mood.equals("angry")) {
+                moodView.setImageResource(R.drawable.angry);
+            } else if (mood.equals("neutral")) {
+                moodView.setImageResource(R.drawable.neutral);
+            } else {
+                moodView.setImageDrawable(null);
+            }
+
+            ArrayList<Thought> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
             mThoughts.addAll(thoughtsFromDb);
             setThoughtPosition("Earliest");
         }
@@ -103,7 +124,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         {
             @Override
             public void onItemClicked(Thought thought) {
-                Toast.makeText(ThoughtsExpansionPage.this, "Thought #" + thought.getPosition() + ": " + thought.getThoughtText(), Toast.LENGTH_SHORT).show();
+                showDialog(thought.getPosition(), thought.getThoughtText());
             }
 
             @Override
@@ -156,6 +177,24 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         }
     }
 
+    public void showDialog(int position, String thoughtText) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheetlayout_thoughtsexpansionpage_thought);
+
+        TextView thoughtsExpansionBottomSheetTitle = dialog.findViewById(R.id.thoughtsExpansionBottomSheetTitle);
+        thoughtsExpansionBottomSheetTitle.setText("Thought #" + position);
+
+        TextView thoughtsExpansionBottomSheetThoughtText = dialog.findViewById(R.id.thoughtsExpansionBottomSheetThoughtText);
+        thoughtsExpansionBottomSheetThoughtText.setText(thoughtText);
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialoAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
 
 
 }
