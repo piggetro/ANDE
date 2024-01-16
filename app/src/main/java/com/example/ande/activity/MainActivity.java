@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -66,8 +69,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.meditationButton) {
-            Intent intent = new Intent(this, MeditationPage.class);
-            startActivity(intent);
+            showMeditationOptionsDialog();
+
+//            Intent intent = new Intent(this, MeditationPage.class);
+//            startActivity(intent);
         } else if (v.getId() == R.id.settingsButton) {
             Intent intent = new Intent(this, SettingsPage.class);
             startActivity(intent);
@@ -78,11 +83,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, FarmCollection.class);
             startActivity(intent);
         } else if (v.getId() == R.id.imageView2) {
-            showDialog();
+            showMoodDialog();
         }
     }
 
-    public void showDialog() {
+    public void showMoodDialog() {
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -136,6 +141,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "Neutral", Toast.LENGTH_SHORT).show();
             }
         });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialoAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+    }
+
+    public void showMeditationOptionsDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheetlayout_meditationpage_options);
+
+        AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.auto_complete_text_view);
+        autoCompleteTextView.setFocusable(false);
+        autoCompleteTextView.setFocusableInTouchMode(false);
+        autoCompleteTextView.setInputType(InputType.TYPE_NULL);
+
+        String[] meditationOptions = {"5 Minutes", "10 Minutes", "20 Minutes"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_list_meditation_options, meditationOptions);
+
+        autoCompleteTextView.setAdapter(adapter);
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
