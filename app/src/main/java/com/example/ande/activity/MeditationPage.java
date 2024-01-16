@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,6 +24,8 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
     private Button pauseButton;
     private boolean isPaused = false;
     private PauseableCountDownTimer countDownTimer;
+    private ImageView muteAudioButton;
+    private boolean isAudioMuted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,12 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
 
         progressBar = findViewById(R.id.progress_bar);
         progressText = findViewById(R.id.progress_text);
+
         pauseButton = findViewById(R.id.meditationPauseButton);
         pauseButton.setOnClickListener(this);
+
+        muteAudioButton = findViewById(R.id.meditationMuteAudioButton);
+        muteAudioButton.setOnClickListener(this);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.meditation_music_10_minutes);
         mediaPlayer.setWakeMode(getApplicationContext(), 1);
@@ -69,23 +76,40 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
         if (v.getId() == R.id.meditationBackButton) {
             mediaPlayer.stop();
             mediaPlayer.release();
+            countDownTimer.cancel();
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else if (v.getId() == R.id.meditationPauseButton) {
-            if (!isPaused) {
-                mediaPlayer.pause();
-                pauseButton.setText("RESUME");
-
-                countDownTimer.pause();
-            } else {
-                mediaPlayer.start();
-                pauseButton.setText("PAUSE");
-
-                countDownTimer.resume();
-            }
-            isPaused = !isPaused;
+            handlePauseButtonClick();
+        } else if (v.getId() == R.id.meditationMuteAudioButton) {
+            handleMuteAudioButtonClick();
         }
     }
+
+    private void handlePauseButtonClick() {
+        if (!isPaused) {
+            mediaPlayer.pause();
+            pauseButton.setText("RESUME");
+            countDownTimer.pause();
+        } else {
+            mediaPlayer.start();
+            pauseButton.setText("PAUSE");
+            countDownTimer.resume();
+        }
+        isPaused = !isPaused;
+    }
+
+    private void handleMuteAudioButtonClick() {
+        if (!isAudioMuted) {
+            mediaPlayer.setVolume(0, 0);
+            muteAudioButton.setImageResource(R.drawable.volume_muted_icon);
+        } else {
+            mediaPlayer.setVolume(1, 1);
+            muteAudioButton.setImageResource(R.drawable.volume_icon);
+        }
+        isAudioMuted = !isAudioMuted;
+    }
 }
+
 
