@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thoughts_expansion_page);
 
+
         Intent intent = getIntent();
         if (intent != null) {
             selectedAbbreviatedMonthDate = intent.getStringExtra("abbreviatedDate");
@@ -50,11 +52,25 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateText);
             abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
 
+            ImageView moodView = (ImageView) findViewById(R.id.thoughtsExpansionPageMoodImage);
             SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
             int userId = sessionManagement.getSession();
 
-            ArrayList<Thought> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
+            String mood = db.getMood(userId, convertedDate);
 
+            if (mood.equals("happy")) {
+                moodView.setImageResource(R.drawable.happy);
+            } else if (mood.equals("sad")) {
+                moodView.setImageResource(R.drawable.sad);
+            } else if (mood.equals("angry")) {
+                moodView.setImageResource(R.drawable.angry);
+            } else if (mood.equals("neutral")) {
+                moodView.setImageResource(R.drawable.neutral);
+            } else {
+                moodView.setImageDrawable(null);
+            }
+
+            ArrayList<Thought> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
             mThoughts.addAll(thoughtsFromDb);
             setThoughtPosition("Earliest");
         }

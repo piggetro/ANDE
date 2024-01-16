@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ImageView;
@@ -48,7 +47,6 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
         thought = dbHandler.getLatestThought(userId, getTodayDateMMDDYYYY());
         meditate = dbHandler.getMeditationTime(userId, getTodayDateMMDDYYYY());
 
-        Log.e("Mood", mood);
         if (mood.equals("happy")) {
             moodView.setImageResource(R.drawable.happy);
         } else if (mood.equals("sad")) {
@@ -85,7 +83,6 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
                 String selectedDateWithouthYear = dayOfMonth + " " + getMonthName(month);
                 dateTextView.setText(selectedDateWithouthYear);
                 Toast.makeText(CalendarPage.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
-                Log.e("Selected Date", formattedDate);
                 mood = dbHandler.getMood(userId, formattedDate);
                 thought = dbHandler.getLatestThought(userId, formattedDate);
                 meditate = dbHandler.getMeditationTime(userId, formattedDate);
