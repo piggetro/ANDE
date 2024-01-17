@@ -29,6 +29,7 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
     private PauseableCountDownTimer countDownTimer;
     private ImageView muteAudioButton;
     private boolean isAudioMuted = false;
+    private boolean isMeditationEnded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,10 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
                 SessionManagement sessionManagement = new SessionManagement(MeditationPage.this);
                 int userId = sessionManagement.getSession();
                 dbHandler.addMeditation(userId, Integer.parseInt(meditationDuration));
+
+                isMeditationEnded = true;
             }
+
         };
 
         countDownTimer.start();
@@ -107,17 +111,20 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
     }
 
     private void handlePauseButtonClick() {
-        if (!isPaused) {
-            mediaPlayer.pause();
-            pauseButton.setText("RESUME");
-            countDownTimer.pause();
-        } else {
-            mediaPlayer.start();
-            pauseButton.setText("PAUSE");
-            countDownTimer.resume();
+        if (!isMeditationEnded) {
+            if (!isPaused) {
+                mediaPlayer.pause();
+                pauseButton.setText("RESUME");
+                countDownTimer.pause();
+            } else {
+                mediaPlayer.start();
+                pauseButton.setText("PAUSE");
+                countDownTimer.resume();
+            }
+            isPaused = !isPaused;
         }
-        isPaused = !isPaused;
     }
+
 
     private void handleMuteAudioButtonClick() {
         if (!isAudioMuted) {
