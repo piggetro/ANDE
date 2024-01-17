@@ -18,7 +18,7 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
 
     private ProgressBar progressBar;
     private TextView progressText;
-    private static final long TOTAL_TIME = 10 * 60 * 1000; // 10 minutes in milliseconds
+    private long TOTAL_TIME;
     private static final long INTERVAL = 1000; // Update interval in milliseconds
     private MediaPlayer mediaPlayer;
     private Button pauseButton;
@@ -32,6 +32,16 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meditation_page);
 
+        Intent intent = getIntent();
+        String meditationType = intent.getStringExtra("meditationType");
+        String meditationMinutes = intent.getStringExtra("meditationMinutes");
+
+        if (meditationType == null || meditationMinutes == null || meditationType.equals("Type") || meditationMinutes.equals("Duration")) {
+            Intent intent2 = new Intent(this, MainActivity.class);
+            startActivity(intent2);
+            return;
+        }
+
         progressBar = findViewById(R.id.progress_bar);
         progressText = findViewById(R.id.progress_text);
 
@@ -41,8 +51,10 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
         muteAudioButton = findViewById(R.id.meditationMuteAudioButton);
         muteAudioButton.setOnClickListener(this);
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.meditation_music_10_minutes);
+        int audioResource = chooseAudioResource(meditationType, meditationMinutes);
+        mediaPlayer = MediaPlayer.create(this, audioResource);
         mediaPlayer.setWakeMode(getApplicationContext(), 1);
+        TOTAL_TIME = mediaPlayer.getDuration();
 
         mediaPlayer.start();
 
@@ -110,6 +122,41 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
         }
         isAudioMuted = !isAudioMuted;
     }
+
+    private int chooseAudioResource(String meditationType, String meditationMinutes) {
+        // Default audio resource
+        int audioResource = R.raw.guided_meditation_10_minutes;
+
+        // Choose audio resource based on meditation type and minutes
+        if (meditationType.equals("Guided Meditation")) {
+            switch (meditationMinutes) {
+                case "5":
+                    audioResource = R.raw.guided_meditation_5_minutes;
+                    break;
+                case "10":
+                    audioResource = R.raw.guided_meditation_10_minutes;
+                    break;
+                case "15":
+                    audioResource = R.raw.guided_meditation_15_minutes;
+                    break;
+            }
+        } else if (meditationType.equals("Meditation Music")) {
+            switch (meditationMinutes) {
+                case "5":
+                    audioResource = R.raw.meditation_music_5_minutes;
+                    break;
+                case "10":
+                    audioResource = R.raw.meditation_music_10_minutes;
+                    break;
+                case "15":
+                    audioResource = R.raw.meditation_music_15_minutes;
+                    break;
+            }
+        }
+
+        return audioResource;
+    }
+
 }
 
 

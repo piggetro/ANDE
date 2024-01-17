@@ -1,5 +1,7 @@
 package com.example.ande.activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -14,8 +16,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ande.R;
@@ -151,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showMeditationOptionsDialog() {
-
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetlayout_meditationpage_options);
@@ -164,28 +167,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String[] meditationTypeOptions = {"Guided Meditation", "Meditation Music"};
 
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, R.layout.dropdown_list_meditation_options, meditationTypeOptions);
-
         autoCompleteTypeTextView.setAdapter(typeAdapter);
-
 
         AutoCompleteTextView autoCompleteMinutesTextView = dialog.findViewById(R.id.auto_complete_meditation_minutes_text_view);
         autoCompleteMinutesTextView.setFocusable(false);
         autoCompleteMinutesTextView.setFocusableInTouchMode(false);
         autoCompleteMinutesTextView.setInputType(InputType.TYPE_NULL);
 
-        String[] meditationMinutesOptions = {"5 Minutes", "10 Minutes", "20 Minutes"};
-
-        ArrayAdapter<String> minutesAdapter = new ArrayAdapter<>(this, R.layout.dropdown_list_meditation_options, meditationMinutesOptions);
+        String[] meditationMinutesOptions = {"5", "10", "15"};
+        ArrayAdapter<String> minutesAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_list_meditation_options, meditationMinutesOptions) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view.findViewById(R.id.meditation_option_minutes_text_view);
+                textView.setText(meditationMinutesOptions[position] + " Mins");
+                return view;
+            }
+        };
 
         autoCompleteMinutesTextView.setAdapter(minutesAdapter);
 
+        Button startMeditationButton = dialog.findViewById(R.id.startMeditationButton);
+
+        startMeditationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String meditationType = autoCompleteTypeTextView.getText().toString();
+                String meditationMinutes = autoCompleteMinutesTextView.getText().toString();
+
+                if (meditationType.isEmpty() || meditationType.equals("Type")) {
+                    Toast.makeText(MainActivity.this, "Please select a meditation type", Toast.LENGTH_SHORT).show();
+                } else if (meditationMinutes.isEmpty() || meditationMinutes.equals("Duration")) {
+                    Toast.makeText(MainActivity.this, "Please select a meditation duration", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MeditationPage.class);
+                    intent.putExtra("meditationType", meditationType);
+                    intent.putExtra("meditationMinutes", meditationMinutes);
+                    startActivity(intent);
+                    dialog.dismiss();
+                }
+            }
+        });
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialoAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-
     }
 
     private String getTodayDate() {
