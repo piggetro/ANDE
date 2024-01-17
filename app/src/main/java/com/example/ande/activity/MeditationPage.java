@@ -12,14 +12,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.ande.R;
+import com.example.ande.helpers.DBHandler;
 import com.example.ande.helpers.PauseableCountDownTimer;
+import com.example.ande.helpers.SessionManagement;
 
 public class MeditationPage extends AppCompatActivity implements View.OnClickListener {
 
+    DBHandler dbHandler = new DBHandler(this);
     private ProgressBar progressBar;
     private TextView progressText;
     private long TOTAL_TIME;
-    private static final long INTERVAL = 1000; // Update interval in milliseconds
+    private static final long INTERVAL = 1; // Update interval in milliseconds
     private MediaPlayer mediaPlayer;
     private Button pauseButton;
     private boolean isPaused = false;
@@ -34,9 +37,9 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
 
         Intent intent = getIntent();
         String meditationType = intent.getStringExtra("meditationType");
-        String meditationMinutes = intent.getStringExtra("meditationMinutes");
+        String meditationDuration = intent.getStringExtra("meditationDuration");
 
-        if (meditationType == null || meditationMinutes == null || meditationType.equals("Type") || meditationMinutes.equals("Duration")) {
+        if (meditationType == null || meditationDuration == null || meditationType.equals("Type") || meditationDuration.equals("Duration")) {
             Intent intent2 = new Intent(this, MainActivity.class);
             startActivity(intent2);
             return;
@@ -51,7 +54,7 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
         muteAudioButton = findViewById(R.id.meditationMuteAudioButton);
         muteAudioButton.setOnClickListener(this);
 
-        int audioResource = chooseAudioResource(meditationType, meditationMinutes);
+        int audioResource = chooseAudioResource(meditationType, meditationDuration);
         mediaPlayer = MediaPlayer.create(this, audioResource);
         mediaPlayer.setWakeMode(getApplicationContext(), 1);
         TOTAL_TIME = mediaPlayer.getDuration();
@@ -77,6 +80,10 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
 
                 progressBar.setProgress(100);
                 progressText.setText("00:00");
+
+                SessionManagement sessionManagement = new SessionManagement(MeditationPage.this);
+                int userId = sessionManagement.getSession();
+                dbHandler.addMeditation(userId, Integer.parseInt(meditationDuration));
             }
         };
 

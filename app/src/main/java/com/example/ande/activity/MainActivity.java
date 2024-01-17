@@ -194,16 +194,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 String meditationType = autoCompleteTypeTextView.getText().toString();
-                String meditationMinutes = autoCompleteMinutesTextView.getText().toString();
+                String meditationDuration = autoCompleteMinutesTextView.getText().toString();
 
                 if (meditationType.isEmpty() || meditationType.equals("Type")) {
                     Toast.makeText(MainActivity.this, "Please select a meditation type", Toast.LENGTH_SHORT).show();
-                } else if (meditationMinutes.isEmpty() || meditationMinutes.equals("Duration")) {
+                } else if (meditationDuration.isEmpty() || meditationDuration.equals("Duration")) {
                     Toast.makeText(MainActivity.this, "Please select a meditation duration", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(MainActivity.this, MeditationPage.class);
                     intent.putExtra("meditationType", meditationType);
-                    intent.putExtra("meditationMinutes", meditationMinutes);
+                    intent.putExtra("meditationDuration", meditationDuration);
                     startActivity(intent);
                     dialog.dismiss();
                 }
