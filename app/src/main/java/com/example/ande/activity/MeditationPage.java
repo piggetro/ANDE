@@ -1,15 +1,26 @@
 package com.example.ande.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -23,6 +34,8 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
     private TextView progressText;
     private long TOTAL_TIME;
     private static final long INTERVAL = 1; // Update interval in milliseconds
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
+
     private MediaPlayer mediaPlayer;
     private Button pauseButton;
     private boolean isPaused = false;
@@ -61,6 +74,7 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
         TOTAL_TIME = mediaPlayer.getDuration();
 
         mediaPlayer.start();
+        showNotification();
 
         countDownTimer = new PauseableCountDownTimer(TOTAL_TIME, INTERVAL) {
             @Override
@@ -82,6 +96,8 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
                 progressBar.setProgress(100);
                 progressText.setText("00:00");
 
+                cancelNotification();
+
                 SessionManagement sessionManagement = new SessionManagement(MeditationPage.this);
                 int userId = sessionManagement.getSession();
                 dbHandler.addMeditation(userId, Integer.parseInt(meditationDuration));
@@ -97,9 +113,13 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.meditationBackButton) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
+            if (!isMeditationEnded) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }
+
             countDownTimer.cancel();
+            cancelNotification();
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -170,6 +190,68 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
 
         return audioResource;
     }
+
+    private void showNotification() {
+        // Create an explicit intent for the notification
+        Intent notificationIntent = new Intent(this, MeditationPage.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        // Create a notification channel (for Android 8.0 and above)
+        createNotificationChannel();
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "MeditationChannel")
+                .setSmallIcon(R.drawable.moodease_noline)
+                .setContentTitle("Meditation in Progress")
+                .setContentText("Your meditation session is running")
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setOngoing(true) // The notification is ongoing (persistent)
+                .setAutoCancel(false);
+
+        // Show the notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
+            return;
+        }
+        notificationManager.notify(1, builder.build());
+    }
+
+    private void cancelNotification() {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.cancel(1);
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "MeditationChannel";
+            String description = "Channel for meditation notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("MeditationChannel", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showNotification();
+            } else {
+                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 
 }
 
