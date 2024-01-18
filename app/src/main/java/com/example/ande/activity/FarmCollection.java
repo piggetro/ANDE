@@ -3,11 +3,20 @@ package com.example.ande.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.ande.R;
+import com.example.ande.helpers.DBHandler;
+import com.example.ande.helpers.SessionManagement;
+import com.example.ande.model.CollectionChar;
 
 public class FarmCollection extends AppCompatActivity {
+
+    DBHandler dbHandler = new DBHandler(this);
+    private int userId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +33,19 @@ public class FarmCollection extends AppCompatActivity {
                     .commit();
         }
 
+
+        SessionManagement sessionManagement = new SessionManagement(FarmCollection.this);
+        userId = sessionManagement.getSession();
+        System.out.print(userId);
+        CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, FarmCollection.this);
+
+        ImageView imageView = findViewById(R.id.imageChar);
+
+     //   int imageResId = getResources().getIdentifier(currentCharacter.getImage(), "drawable", getPackageName());
+        imageView.setImageResource(currentCharacter.getImage());
+
     }
+
 
 
 }

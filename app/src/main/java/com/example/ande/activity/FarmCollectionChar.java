@@ -10,9 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.ande.helpers.CollectionCharAdapter;
 import com.example.ande.R;
+import com.example.ande.helpers.DBHandler;
+import com.example.ande.helpers.SessionManagement;
+import com.example.ande.model.CollectionChar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +38,11 @@ public class FarmCollectionChar extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private int userId;
     private RecyclerView recyclerView;
     private CollectionCharAdapter adapter;
     private List<CollectionChar> characterList = new ArrayList<>();
-
+    private DBHandler dbHandler;
     public FarmCollectionChar() {
         // Required empty public constructor
     }
@@ -67,6 +73,9 @@ public class FarmCollectionChar extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
+        dbHandler = new DBHandler(getContext());
+        SessionManagement sessionManagement = new SessionManagement(getContext());
+        userId = sessionManagement.getSession();
 
     }
 
@@ -89,19 +98,29 @@ public class FarmCollectionChar extends Fragment {
         // Initialize your characters list here or in a separate method
         characterList = getCharacterList();
         adapter = new CollectionCharAdapter(view.getContext(), characterList);
+
+        TextView charNameTextView = view.findViewById(R.id.currentCharName);
+        CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, getContext());
+        charNameTextView.setText(currentCharacter.getName());
         recyclerView.setAdapter(adapter);
+
+
     }
 
     private List<CollectionChar> getCharacterList() {
+      characterList = dbHandler.getAllUserAnimals(userId, getContext());
         // Create or fetch your characters here
         // For example:
-        characterList.add(new CollectionChar("Oink", R.drawable.emotioncows));
-        characterList.add(new CollectionChar("What", R.drawable.happycow));
-        characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
-        characterList.add(new CollectionChar("Oink", R.drawable.emotioncows));
-        characterList.add(new CollectionChar("What", R.drawable.happycow));
-        characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
-        characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
+//
+//
+//
+//        characterList.add(new CollectionChar("Oink", R.drawable.pet_neutral_cow));
+//        characterList.add(new CollectionChar("What", R.drawable.pet_happy_cow));
+//        characterList.add(new CollectionChar("Meow", R.drawable.pet_neutral_pig));
+//        characterList.add(new CollectionChar("Oink", R.drawable.pet_neutral_cow));
+//        characterList.add(new CollectionChar("What", R.drawable.pet_happy_cow));
+//        characterList.add(new CollectionChar("Meow", R.drawable.pet_neutral_pig));
+//        characterList.add(new CollectionChar("Meow", R.drawable.pet_neutral_pig));
 
         return characterList;
     }
