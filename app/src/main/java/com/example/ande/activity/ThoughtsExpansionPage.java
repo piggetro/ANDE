@@ -82,7 +82,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 
         setUIRef();
 
-        autoCompleteTextView = findViewById(R.id.auto_complete_text_view);
+        autoCompleteTextView = findViewById(R.id.auto_complete_meditation_minutes_text_view);
         sortByDropDownAdapter = new ArrayAdapter<>(this, R.layout.list_item, sortByDropDownItems);
         autoCompleteTextView.setAdapter(sortByDropDownAdapter);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

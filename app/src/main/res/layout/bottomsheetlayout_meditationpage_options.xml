@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/MaterialComponentsLightNoActionBar"
+    android:background="@drawable/bottomsheetlayout_meditationpage_options_rounded_borders">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="25dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="227dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/meditation_peacful_background_image" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Meditation"
+        android:textSize="25sp"
+        android:gravity="start"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/barlow_light"
+        android:textStyle="bold"
+        android:letterSpacing="0.05"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/barlow"
+        android:gravity="start"
+        android:paddingHorizontal="10dp"
+        android:text="@string/meditation_description"
+        android:textSize="20sp"
+        android:textStyle="normal" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/CustomExposedDropdownMenuTopCornersRounded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="20dp"
+        app:boxBackgroundColor="@android:color/white" >
+
+        <AutoCompleteTextView
+            android:id="@+id/auto_complete_meditation_type_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:text="Type" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/CustomExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="5dp"
+        app:boxBackgroundColor="@android:color/white" >
+
+        <AutoCompleteTextView
+            android:id="@+id/auto_complete_meditation_minutes_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:text="Duration" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/startMeditationButton"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="30dp"
+        android:layout_height="55dp"
+        android:background="@drawable/meditation_start_button"
+        android:fontFamily="@font/barlow_bold"
+        android:text="Start"
+        android:textColor="@color/white"
+        android:layout_gravity="center" />
+
+</LinearLayout>
