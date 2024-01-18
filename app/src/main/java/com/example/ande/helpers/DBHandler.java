@@ -468,6 +468,22 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+    public void addMeditation(int userId, int minutes) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_MEDITATION_USER_ID, userId);
+        cv.put(KEY_USER_MEDITATION_MINUTES, minutes);
+
+        sqLiteDatabase.insert(TABLE_USER_MEDITATION, null, cv);
+
+        int points = 5 * minutes;
+
+        addPointsToUserAnimal(userId, points);
+
+        sqLiteDatabase.close();
+    }
+  
     public void addUserAnimal(int userId, int animalId, String animalName) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 

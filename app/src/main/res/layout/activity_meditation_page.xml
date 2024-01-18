@@ -109,7 +109,15 @@
                 android:text="PAUSE"
                 android:textColor="#7DA9AC" />
 
-        </LinearLayout>
+        <Button
+            android:id="@+id/meditationPauseButton"
+            android:layout_width="330dp"
+            android:layout_height="48dp"
+            android:background="@drawable/meditation_pause_button"
+            android:fontFamily="@font/barlow_bold"
+            android:text="PAUSE"
+            android:textColor="#7DA9AC"
+            android:layout_gravity="center" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
