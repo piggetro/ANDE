@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ande.R;
-import com.example.ande.activity.CollectionChar;
+import com.example.ande.model.CollectionChar;
 import com.example.ande.activity.CollectionCharViewHolder;
 
 import java.util.List;

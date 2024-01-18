@@ -42,7 +42,7 @@
             android:scaleY="1"
             android:translationY="100px"
             android:translationZ="10px"
-            app:srcCompat="@drawable/neutral_pig" />
+            app:srcCompat="@drawable/pet_neutral_pig" />
 
         <LinearLayout
             android:id="@+id/linearLayout"

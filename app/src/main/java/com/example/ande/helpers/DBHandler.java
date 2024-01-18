@@ -7,10 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.ande.model.CollectionChar;
 import com.example.ande.model.Thought;
 import com.example.ande.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -25,11 +27,14 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String TABLE_ANIMAL = "animal";
     private static final String KEY_ANIMAL_ID = "animal_id";
-    private static final String KEY_ANIMAL_NAME = "animal_name";
+    private static final String KEY_ANIMAL_TYPE = "animal_type";
     private static final String KEY_ANIMAL_MAX = "animal_max";
 
     private static final String TABLE_USER_ANIMAL = "user_animal";
+
     private static final String KEY_USER_ANIMAL_ID = "user_animal_id";
+
+    private static final String KEY_USER_ANIMAL_NAME = "user_animal_name";
     private static final String KEY_USER_ANIMAL_USER_ID = "user_id";
     private static final String KEY_USER_ANIMAL_ANIMAL_ID = "animal_id";
     private static final String KEY_USER_ANIMAL_POINT = "animal_point";
@@ -69,17 +74,19 @@ public class DBHandler extends SQLiteOpenHelper {
                 KEY_USER_PASSWORD + " TEXT" +
                 ");";
 
+
         String CREATE_TABLE_ANIMAL = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_ANIMAL + " (" +
                 KEY_ANIMAL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                KEY_ANIMAL_NAME + " TEXT, " +
-                KEY_ANIMAL_MAX + " INTEGER" +
+                KEY_ANIMAL_TYPE +" TEXT," +
+                KEY_ANIMAL_MAX + " INTEGER DEFAULT 200" +
                 ");";
 
         String CREATE_TABLE_USER_ANIMAL = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_USER_ANIMAL + " (" +
                 KEY_USER_ANIMAL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 KEY_USER_ANIMAL_USER_ID + " INTEGER, " +
+                KEY_USER_ANIMAL_NAME + " TEXT, " +
                 KEY_USER_ANIMAL_ANIMAL_ID + " INTEGER, " +
                 KEY_USER_ANIMAL_POINT + " INTEGER DEFAULT 0, " +
                 KEY_USER_ANIMAL_ISACTIVE + " INTEGER DEFAULT 0, " +
@@ -114,9 +121,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + KEY_USER_MEDITATION_USER_ID + ") REFERENCES your_user_table_name(your_user_id_column_name)" +
                 ");";
 
-        String multiRowInsert = "INSERT INTO " + TABLE_ANIMAL + " (" + KEY_ANIMAL_NAME + ", " + KEY_ANIMAL_MAX + ") VALUES " +
+        String multiRowInsert = "INSERT INTO " + TABLE_ANIMAL + " ( " + KEY_ANIMAL_TYPE + ", " + KEY_ANIMAL_MAX + ") VALUES " +
                 "('Pig', 100), " +
                 "('Rabbit', 200), " +
+                "('Chick', 200), " +
                 "('Cow', 300);";
 
         //TODO: ONLY FOR TESTING. Remove this after testing
@@ -125,10 +133,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 "('t2@gmail.com', 't', 't');";
 
         //TODO: ONLY FOR TESTING. Remove this after testing
-        String multiRowInsertUserAnimal = "INSERT INTO " + TABLE_USER_ANIMAL + " (" + KEY_USER_ANIMAL_USER_ID + ", " + KEY_USER_ANIMAL_ANIMAL_ID + ", " + KEY_USER_ANIMAL_POINT + ", " + KEY_USER_ANIMAL_ISACTIVE + ") VALUES " +
-                "(1, 1, 0, 0), " +  // User 1, Animal 1 (Pig), Points 0, Inactive
-                "(1, 2, 0, 0), " +  // User 1, Animal 2 (Rabbit), Points 0, Inactive
-                "(1, 3, 0, 1);";   // User 1, Animal 3 (Cow), Points 0, Active
+        String multiRowInsertUserAnimal = "INSERT INTO " + TABLE_USER_ANIMAL + " (" + KEY_USER_ANIMAL_USER_ID + ", " + KEY_USER_ANIMAL_ANIMAL_ID + ", " + KEY_USER_ANIMAL_NAME + ", " + KEY_USER_ANIMAL_POINT + ", " + KEY_USER_ANIMAL_ISACTIVE + ") VALUES " +
+                "(1, 1, 'Sir David' , 100, 0), " +  // User 1, Animal 1 (Pig), Points 100, Inactive
+                "(1, 2, 'Tutu', 200, 0), " +  // User 1, Animal 2 (Rabbit), Points 200, Inactive
+                "(1, 3, 'MooMoo', 50, 1);";   // User 1, Animal 3 (Cow), Points 0, Active
 
         sqLiteDatabase.execSQL(CREATE_TABLE_USER);
         sqLiteDatabase.execSQL(CREATE_TABLE_ANIMAL);
@@ -460,5 +468,133 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+    public void addUserAnimal(int userId, int animalId, String animalName) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_ANIMAL_USER_ID, userId);
+        cv.put(KEY_USER_ANIMAL_POINT, 50);
+        cv.put(KEY_USER_ANIMAL_ANIMAL_ID, animalId);
+        cv.put(KEY_USER_ANIMAL_NAME, animalName);
+
+        sqLiteDatabase.insert(TABLE_USER_ANIMAL, null, cv);
+
+        sqLiteDatabase.close();
+    }
+
+    public List<CollectionChar> getAllUserAnimals(int userId , Context context) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        List<CollectionChar> characterList = new ArrayList<>();
+
+        String query = "SELECT * FROM " + TABLE_USER_ANIMAL +
+                " INNER JOIN " + TABLE_ANIMAL +
+                " ON " + TABLE_USER_ANIMAL + "." + KEY_USER_ANIMAL_ANIMAL_ID +
+                " = " + TABLE_ANIMAL + "." + KEY_ANIMAL_ID +
+                " WHERE " + KEY_USER_ANIMAL_USER_ID + " = " + userId +
+                " AND " + KEY_USER_ANIMAL_ISACTIVE + " = 0;";
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+
+        int nameColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_NAME);
+        int pointColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_POINT); // Replace with your actual image column key
+        int animalIdColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_ID);
+        int animalTypeColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_TYPE);
+        if (nameColumnIndex != -1 && pointColumnIndex != -1 && animalIdColumnIndex != -1 && animalTypeColumnIndex != -1) {
+            if (cursor.moveToFirst()) {
+                do {
+                    String animalName = cursor.getString(nameColumnIndex);
+                    int animalPoints = cursor.getInt(pointColumnIndex);
+                    String animalType = cursor.getString(animalTypeColumnIndex);
+                    int animalId = cursor.getInt(animalIdColumnIndex);
+
+                    //get drawable url
+                    String petTypeDrawable = getPetTypeDrawable(animalId, animalPoints, animalType);
+
+                    int imageId = context.getResources().getIdentifier(petTypeDrawable, "drawable", context.getPackageName());
+
+                    // Create a new CollectionChar object and add it to the list
+                    CollectionChar character = new CollectionChar(animalName, imageId);
+                    characterList.add(character);
+
+                    // Optionally log the animal name
+                    Log.e("AnimalNameLog", "Animal Name: " + animalName);
+
+                } while (cursor.moveToNext());
+            } else {
+                Log.e("AnimalNameLog", "No matching user found");
+            }
+        } else {
+            Log.e("AnimalNameLog", "Invalid column index");
+        }
+
+        cursor.close(); // Always close the cursor
+        return characterList; // Return the list of characters
+    }
+
+    public String getPetTypeDrawable (int animalId, int animalPoints, String animalType) {
+        String emotion;
+        if (animalPoints < 50) {
+            emotion = "sad";
+        } else if (animalPoints < 20) {
+            emotion = "verysad";
+        } else if (animalPoints > 60/100*getAnimalMaxPoints(animalId)) {
+            emotion = "happy";
+        } else {
+            emotion = "neutral";
+        }
+        String petTypeDrawable = "pet_" +emotion + "_" + animalType.toLowerCase();
+
+        return petTypeDrawable;
+    }
+
+    public CollectionChar getActiveUserAnimal(int userId, Context context) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        CollectionChar character = null;
+
+        String query = "SELECT * FROM " + TABLE_USER_ANIMAL +
+                " INNER JOIN " + TABLE_ANIMAL +
+                " ON " + TABLE_USER_ANIMAL + "." + KEY_USER_ANIMAL_ANIMAL_ID +
+                " = " + TABLE_ANIMAL + "." + KEY_ANIMAL_ID +
+                " WHERE " + KEY_USER_ANIMAL_USER_ID + " = " + userId +
+                " AND " + KEY_USER_ANIMAL_ISACTIVE + " = 1;";
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        Log.e("Query", String.valueOf(cursor));
+
+        int nameColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_NAME);
+        int pointColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_POINT);
+        int animalIdColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_ID);
+        int animalTypeColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_TYPE);
+
+        if (nameColumnIndex != -1 && pointColumnIndex != -1 && animalIdColumnIndex != -1 && animalTypeColumnIndex != -1) {
+            if (cursor.moveToFirst()) {
+                String animalName = cursor.getString(nameColumnIndex);
+                int animalPoints = cursor.getInt(pointColumnIndex);
+                String animalType = cursor.getString(animalTypeColumnIndex);
+                int animalId = cursor.getInt(animalIdColumnIndex);
+
+                // Determine the emotional state based on points
+                String petTypeDrawable = getPetTypeDrawable(animalId, animalPoints, animalType);
+                int imageId = context.getResources().getIdentifier(petTypeDrawable, "drawable", context.getPackageName());
+
+                character = new CollectionChar(animalName, imageId);
+            } else {
+                Log.e("AnimalNameLog", "No active animal found for user");
+            }
+        } else {
+            Log.e("AnimalNameLog", "Invalid column index");
+            Log.e("AnimalNameLog NameColumn", String.valueOf(nameColumnIndex));
+            Log.e("AnimalNameLog pointColumn", String.valueOf(pointColumnIndex));
+            Log.e("AnimalNameLog animalIdColumn", String.valueOf(animalIdColumnIndex));
+            Log.e("AnimalNameLog typeColumn", String.valueOf(animalTypeColumnIndex));
+
+        }
+
+        cursor.close();
+        return character; // Returns the CollectionChar object or null if not found
+    }
+
 
 }
+
