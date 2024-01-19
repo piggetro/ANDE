@@ -1,5 +1,6 @@
 package com.example.ande.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.ande.helpers.CollectionCharAdapter;
@@ -43,6 +45,9 @@ public class FarmCollectionChar extends Fragment {
     private CollectionCharAdapter adapter;
     private List<CollectionChar> characterList = new ArrayList<>();
     private DBHandler dbHandler;
+    private ProgressBar happinessMeter;
+
+    private String currentPointsText;
     public FarmCollectionChar() {
         // Required empty public constructor
     }
@@ -94,33 +99,46 @@ public class FarmCollectionChar extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setHasFixedSize(true);
 
-
+        int currentProgress = 0;
         // Initialize your characters list here or in a separate method
         characterList = getCharacterList();
-        adapter = new CollectionCharAdapter(view.getContext(), characterList);
+        adapter = new CollectionCharAdapter(view.getContext(), characterList, new CollectionCharAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                navigateToAnimalViewerActivity(position);
+            }
+        });
 
         TextView charNameTextView = view.findViewById(R.id.currentCharName);
         CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, getContext());
+
         charNameTextView.setText(currentCharacter.getName());
+        int currentPoints = currentCharacter.getCurrentPoints();
+        int maxPoints = dbHandler.getAnimalMaxPoints(currentCharacter.getAnimalId());
+
+        happinessMeter = view.findViewById(R.id.happinessMeterBar);
+        currentProgress = (currentPoints / maxPoints )*100;
+        happinessMeter.setProgress(currentPoints);
+        happinessMeter.setMax(maxPoints);
+
+
+        TextView currentPointsTextView = view.findViewById(R.id.progressText);
+        currentPointsText = currentPoints + "/" + maxPoints;
+        currentPointsTextView.setText(currentPointsText);
         recyclerView.setAdapter(adapter);
 
 
     }
-
+    private void navigateToAnimalViewerActivity(int position) {
+        Intent intent = new Intent(getActivity(), AnimalViewerActivity.class);
+        intent.putExtra("position", position); // Pass the clicked position
+        startActivity(intent);
+    }
     private List<CollectionChar> getCharacterList() {
       characterList = dbHandler.getAllUserAnimals(userId, getContext());
         // Create or fetch your characters here
         // For example:
-//
-//
-//
-//        characterList.add(new CollectionChar("Oink", R.drawable.pet_neutral_cow));
-//        characterList.add(new CollectionChar("What", R.drawable.pet_happy_cow));
-//        characterList.add(new CollectionChar("Meow", R.drawable.pet_neutral_pig));
-//        characterList.add(new CollectionChar("Oink", R.drawable.pet_neutral_cow));
-//        characterList.add(new CollectionChar("What", R.drawable.pet_happy_cow));
-//        characterList.add(new CollectionChar("Meow", R.drawable.pet_neutral_pig));
-//        characterList.add(new CollectionChar("Meow", R.drawable.pet_neutral_pig));
+
 
         return characterList;
     }

@@ -4,9 +4,20 @@ public class CollectionChar {
     String name;
     Integer image;
 
+    Integer animalId;
+
+    Integer currentPoints;
+
     public CollectionChar(String name, Integer image) {
         this.name = name;
         this.image = image;
+    }
+
+    public CollectionChar(int animalId, String name, Integer image, Integer currentPoints) {
+        this.name = name;
+        this.image = image;
+        this.currentPoints = currentPoints;
+        this.animalId = animalId;
     }
 
     public String getName() {
@@ -23,5 +34,15 @@ public class CollectionChar {
 
     public void setImage(Integer image) {
         this.image = image;
+    }
+    public void setCurrentPoints(Integer newPoints) {
+        this.currentPoints = newPoints;
+    }
+    public Integer getCurrentPoints() {
+        return currentPoints;
+    }
+
+    public Integer getAnimalId() {
+        return animalId;
     }
 }
