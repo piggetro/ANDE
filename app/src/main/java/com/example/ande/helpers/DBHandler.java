@@ -136,7 +136,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String multiRowInsertUserAnimal = "INSERT INTO " + TABLE_USER_ANIMAL + " (" + KEY_USER_ANIMAL_USER_ID + ", " + KEY_USER_ANIMAL_ANIMAL_ID + ", " + KEY_USER_ANIMAL_NAME + ", " + KEY_USER_ANIMAL_POINT + ", " + KEY_USER_ANIMAL_ISACTIVE + ") VALUES " +
                 "(1, 1, 'Sir David' , 100, 0), " +  // User 1, Animal 1 (Pig), Points 100, Inactive
                 "(1, 2, 'Tutu', 200, 0), " +  // User 1, Animal 2 (Rabbit), Points 200, Inactive
-                "(1, 3, 'MooMoo', 50, 1);";   // User 1, Animal 3 (Cow), Points 0, Active
+                "(1, 4, 'MooMoo', 50, 1);";   // User 1, Animal 4 (Cow), Points 0, Active
 
         sqLiteDatabase.execSQL(CREATE_TABLE_USER);
         sqLiteDatabase.execSQL(CREATE_TABLE_ANIMAL);
@@ -366,7 +366,7 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.close();
     }
 
-    private int getAnimalMaxPoints(int animalId) {
+    public int getAnimalMaxPoints(int animalId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String[] columns = {KEY_ANIMAL_MAX};
@@ -549,16 +549,16 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public String getPetTypeDrawable (int animalId, int animalPoints, String animalType) {
         String emotion;
-        if (animalPoints < 50) {
-            emotion = "sad";
-        } else if (animalPoints < 20) {
+        if (animalPoints < 20) {
             emotion = "verysad";
-        } else if (animalPoints > 60/100*getAnimalMaxPoints(animalId)) {
+        } else if (animalPoints < 50) {
+            emotion = "sad";
+        } else if (animalPoints > (70/100.0*getAnimalMaxPoints(animalId))) { // Use floating point division
             emotion = "happy";
         } else {
             emotion = "neutral";
         }
-        String petTypeDrawable = "pet_" +emotion + "_" + animalType.toLowerCase();
+        String petTypeDrawable = "pet_" + emotion + "_" + animalType.toLowerCase();
 
         return petTypeDrawable;
     }
@@ -594,7 +594,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 String petTypeDrawable = getPetTypeDrawable(animalId, animalPoints, animalType);
                 int imageId = context.getResources().getIdentifier(petTypeDrawable, "drawable", context.getPackageName());
 
-                character = new CollectionChar(animalName, imageId);
+                character = new CollectionChar(animalId, animalName, imageId, animalPoints);
             } else {
                 Log.e("AnimalNameLog", "No active animal found for user");
             }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/happinessMeterBackground">
+          <shape android:shape="rectangle">
+                <solid android:color="#ebf3f5" />
+                <corners android:radius="6dp" />
+            </shape>
+       </item>
+
+    <item android:id="@+id/happiness">
+        <scale android:scaleWidth="100%">
+            <shape android:shape="rectangle">
+                <solid android:color="#9FC8CE" />
+                <corners android:radius="6dp" />
+            </shape>
+        </scale>
+
+    </item>
+</layer-list>

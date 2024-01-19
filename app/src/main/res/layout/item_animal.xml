@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:elevation ="30dp">
+
+    <ImageView
+        android:id="@+id/animalImage"
+        android:layout_width="195dp"
+        android:layout_height="237dp"
+        android:layout_marginBottom="90dp"
+        android:elevation="30dp"
+        android:src="@drawable/pet_neutral_pig" />
+
+    <TextView
+        android:id="@+id/animalName"
+        android:layout_width="307dp"
+        android:layout_height="43dp"
+        android:elevation="10dp"
+        android:fontFamily="@font/barlow_black"
+        android:shadowColor="#000000"
+        android:text="Hello"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="34sp" />
+
+</LinearLayout>

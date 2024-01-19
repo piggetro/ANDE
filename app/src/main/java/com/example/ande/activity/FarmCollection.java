@@ -2,6 +2,7 @@ package com.example.ande.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
@@ -24,7 +25,10 @@ public class FarmCollection extends AppCompatActivity {
         setContentView(R.layout.activity_farm_collection);
 
       ImageButton backButton = findViewById(R.id.imageButton);
-        backButton.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
 
         // Fragment Transaction to add FarmCollectionCharFragment to its container
         if (savedInstanceState == null) {

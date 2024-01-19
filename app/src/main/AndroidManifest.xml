@@ -30,6 +30,9 @@
         <!-- android:name=".login_signup_page" -->
         <!-- android:exported="false" /> -->
         <activity
+            android:name=".activity.AnimalViewerActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ThoughtsExpansionPage"
             android:exported="false"
             android:theme="@style/MaterialComponentsLightNoActionBar" />

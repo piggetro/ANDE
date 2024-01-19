@@ -22,9 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
 import com.example.ande.helpers.SessionManagement;
+import com.example.ande.model.CollectionChar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,6 +36,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView imageView;
+
+    ImageView homeAnimal;
     private DBHandler dbHandler;
     private String mood;
     private int userId;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.imageView2);
+        homeAnimal = findViewById(R.id.homePageAnimalImg);
         dbHandler = new DBHandler(MainActivity.this);
 
         SessionManagement sessionManagement = new SessionManagement(MainActivity.this);
@@ -51,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(MainActivity.this, "User ID" + userId, Toast.LENGTH_SHORT).show();
 
         mood = dbHandler.getMood(userId, getTodayDate());
+        CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, MainActivity.this);
+        homeAnimal.setImageResource(currentCharacter.getImage());
 
         if (mood.equals("happy")) {
             imageView.setEnabled(false);
