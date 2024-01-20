@@ -310,7 +310,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
 
-        addPointsToUserAnimal(userId, 20);
+        addPointsToUserAnimal(userId, 100);
 
         sqLiteDatabase.close();
     }

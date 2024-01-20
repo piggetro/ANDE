@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -151,20 +152,39 @@ public class FarmCollectionChar extends Fragment {
                 showAnimalListDialog();
             });
         } else {
+
             editNameBtn.setOnClickListener(v -> {
                 showEditPetNameDialog(currentCharacter);
             });
             charNameTextView.setText(currentCharacter.getName());
             currentPoints = currentCharacter.getCurrentPoints();
             maxPoints = dbHandler.getAnimalMaxPoints(currentCharacter.getAnimalId());
+
+            if (currentPoints >= maxPoints) {
+                newAnimalButton.setVisibility(View.VISIBLE);
+                newAnimalButton.setOnClickListener(v -> {
+                    showAnimalListDialog();
+                });
+            }
+
+            Log.e("currentPoints", String.valueOf(currentPoints));
+            Log.e("maxPoints", String.valueOf(maxPoints));
         }
 
+        int finalMaxPoints = maxPoints;
 
-        happinessMeter.setProgress(currentPoints);
-        happinessMeter.setMax(maxPoints);
+        int finalCurrentPoints = currentPoints;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                happinessMeter.setProgress(0);
+                happinessMeter.setMax(finalMaxPoints);
+                happinessMeter.setProgress(finalCurrentPoints);
 
-        currentPointsText = currentPoints + "/" + maxPoints;
-        currentPointsTextView.setText(currentPointsText);
+                String currentPointsText = finalCurrentPoints + "/" + finalMaxPoints;
+                currentPointsTextView.setText(currentPointsText);
+            }
+        });
 
 
     }
