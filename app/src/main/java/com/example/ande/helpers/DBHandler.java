@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.ande.model.Animal;
 import com.example.ande.model.CollectionChar;
 import com.example.ande.model.Thought;
 import com.example.ande.model.User;
@@ -483,22 +484,35 @@ public class DBHandler extends SQLiteOpenHelper {
 
         sqLiteDatabase.close();
     }
-  
+
     public void addUserAnimal(int userId, int animalId, String animalName) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
+        //Check for existing active animal
+        String selection = KEY_USER_ANIMAL_USER_ID + " = ? AND " + KEY_USER_ANIMAL_ISACTIVE + " = 1";
+        String[] selectionArgs = { String.valueOf(userId) };
+        ContentValues cvUpdate = new ContentValues();
+        cvUpdate.put(KEY_USER_ANIMAL_ISACTIVE, 0);
+
+        // Update existing active animal's isActive to 0
+        sqLiteDatabase.update(TABLE_USER_ANIMAL, cvUpdate, selection, selectionArgs);
+
+        // Step 2: Add the new animal
         ContentValues cv = new ContentValues();
         cv.put(KEY_USER_ANIMAL_USER_ID, userId);
-        cv.put(KEY_USER_ANIMAL_POINT, 50);
+        cv.put(KEY_USER_ANIMAL_POINT, 50); // default starting is 50
         cv.put(KEY_USER_ANIMAL_ANIMAL_ID, animalId);
         cv.put(KEY_USER_ANIMAL_NAME, animalName);
+        cv.put(KEY_USER_ANIMAL_ISACTIVE, 1); // Set new animal as active
 
+        // Insert the new animal
         sqLiteDatabase.insert(TABLE_USER_ANIMAL, null, cv);
 
+        // Close the database
         sqLiteDatabase.close();
     }
 
-    public List<CollectionChar> getAllUserAnimals(int userId , Context context) {
+    public List<CollectionChar> getAllUserAnimals(int userId, Context context) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         List<CollectionChar> characterList = new ArrayList<>();
 
@@ -510,46 +524,41 @@ public class DBHandler extends SQLiteOpenHelper {
                 " AND " + KEY_USER_ANIMAL_ISACTIVE + " = 0;";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
 
-
         int nameColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_NAME);
-        int pointColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_POINT); // Replace with your actual image column key
+        int pointColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_POINT);
         int animalIdColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_ID);
         int animalTypeColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_TYPE);
+
         if (nameColumnIndex != -1 && pointColumnIndex != -1 && animalIdColumnIndex != -1 && animalTypeColumnIndex != -1) {
-            if (cursor.moveToFirst()) {
-                do {
-                    String animalName = cursor.getString(nameColumnIndex);
-                    int animalPoints = cursor.getInt(pointColumnIndex);
-                    String animalType = cursor.getString(animalTypeColumnIndex);
-                    int animalId = cursor.getInt(animalIdColumnIndex);
+            while (cursor.moveToNext()) {
+                String animalName = cursor.getString(nameColumnIndex);
+                int animalPoints = cursor.getInt(pointColumnIndex);
+                String animalType = cursor.getString(animalTypeColumnIndex);
+                int animalId = cursor.getInt(animalIdColumnIndex);
 
-                    //get drawable url
-                    String petTypeDrawable = getPetTypeDrawable(animalId, animalPoints, animalType);
+                String petTypeDrawable = getPetTypeDrawable(animalId, animalPoints, animalType);
+                int imageId = context.getResources().getIdentifier(petTypeDrawable, "drawable", context.getPackageName());
 
-                    int imageId = context.getResources().getIdentifier(petTypeDrawable, "drawable", context.getPackageName());
+                CollectionChar character = new CollectionChar(animalName, imageId);
+                characterList.add(character);
 
-                    // Create a new CollectionChar object and add it to the list
-                    CollectionChar character = new CollectionChar(animalName, imageId);
-                    characterList.add(character);
-
-                    // Optionally log the animal name
-                    Log.e("AnimalNameLog", "Animal Name: " + animalName);
-
-                } while (cursor.moveToNext());
-            } else {
-                Log.e("AnimalNameLog", "No matching user found");
+                Log.e("AnimalNameLog", "Animal Name: " + animalName);
             }
         } else {
             Log.e("AnimalNameLog", "Invalid column index");
         }
 
-        cursor.close(); // Always close the cursor
-        return characterList; // Return the list of characters
+        cursor.close();
+        return characterList;
     }
 
     public String getPetTypeDrawable (int animalId, int animalPoints, String animalType) {
         String emotion;
-        if (animalPoints < 20) {
+        String petTypeDrawable;
+
+        if (animalPoints == -1) {
+            emotion = "neutral";
+        }else if (animalPoints < 20) {
             emotion = "verysad";
         } else if (animalPoints < 50) {
             emotion = "sad";
@@ -558,7 +567,7 @@ public class DBHandler extends SQLiteOpenHelper {
         } else {
             emotion = "neutral";
         }
-        String petTypeDrawable = "pet_" + emotion + "_" + animalType.toLowerCase();
+        petTypeDrawable = "pet_" + emotion + "_" + animalType.toLowerCase();
 
         return petTypeDrawable;
     }
@@ -576,15 +585,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
 
-        Log.e("Query", String.valueOf(cursor));
+        if (cursor != null && cursor.moveToFirst()) {
+            Log.e("FetchAnimal", "Animal Found");
 
-        int nameColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_NAME);
-        int pointColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_POINT);
-        int animalIdColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_ID);
-        int animalTypeColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_TYPE);
+            int nameColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_NAME);
+            int pointColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_POINT);
+            int animalIdColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_ID);
+            int animalTypeColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_TYPE);
 
-        if (nameColumnIndex != -1 && pointColumnIndex != -1 && animalIdColumnIndex != -1 && animalTypeColumnIndex != -1) {
-            if (cursor.moveToFirst()) {
+            if (nameColumnIndex != -1 && pointColumnIndex != -1 && animalIdColumnIndex != -1 && animalTypeColumnIndex != -1) {
                 String animalName = cursor.getString(nameColumnIndex);
                 int animalPoints = cursor.getInt(pointColumnIndex);
                 String animalType = cursor.getString(animalTypeColumnIndex);
@@ -596,19 +605,68 @@ public class DBHandler extends SQLiteOpenHelper {
 
                 character = new CollectionChar(animalId, animalName, imageId, animalPoints);
             } else {
-                Log.e("AnimalNameLog", "No active animal found for user");
+                Log.e("AnimalNameLog", "Invalid column index");
+            }
+        } else {
+            Log.e("AnimalNameLog", "No active animal found for user");
+            int placeholderImageId = context.getResources().getIdentifier("pet_placeholder", "drawable", context.getPackageName());
+            character = new CollectionChar(-1, "No Animal", placeholderImageId, 0);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        return character; // Returns the CollectionChar object with either animal data or placeholder
+    }
+
+
+public List<Animal> getAllAnimalTypes(Context context) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        List<Animal> animalList = new ArrayList<>();
+
+        String query = "SELECT * FROM " + TABLE_ANIMAL + ";";
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        int animalIdColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_ID);
+        int animalTypeColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_TYPE);
+        int animalMaxColumnIndex = cursor.getColumnIndex(KEY_ANIMAL_MAX);
+
+        if (animalIdColumnIndex != -1 && animalTypeColumnIndex != -1 && animalMaxColumnIndex != -1) {
+            while (cursor.moveToNext()) {
+                int animalId = cursor.getInt(animalIdColumnIndex);
+                String animalType = cursor.getString(animalTypeColumnIndex);
+                int animalMax = cursor.getInt(animalMaxColumnIndex);
+
+
+                String petTypeDrawable = getPetTypeDrawable(animalId, -1, animalType);
+                int imageId = context.getResources().getIdentifier(petTypeDrawable, "drawable", context.getPackageName());
+                Animal animal = new Animal(animalId, animalType, animalMax, imageId);
+                animalList.add(animal);
+                Log.e("AnimalNameLog", "Animal Name: " + animalType);
             }
         } else {
             Log.e("AnimalNameLog", "Invalid column index");
-            Log.e("AnimalNameLog NameColumn", String.valueOf(nameColumnIndex));
-            Log.e("AnimalNameLog pointColumn", String.valueOf(pointColumnIndex));
-            Log.e("AnimalNameLog animalIdColumn", String.valueOf(animalIdColumnIndex));
-            Log.e("AnimalNameLog typeColumn", String.valueOf(animalTypeColumnIndex));
-
         }
 
         cursor.close();
-        return character; // Returns the CollectionChar object or null if not found
+        return animalList;
+
+    }
+
+    //you only have one animal that is active at a time
+    public void updateAnimalName (int userId, String newName) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_ANIMAL_NAME, newName);
+
+        String whereClause = KEY_USER_ANIMAL_USER_ID + " = ? AND " + KEY_USER_ANIMAL_ISACTIVE + " = 1";
+        String[] whereArgs = {String.valueOf(userId)};
+
+        sqLiteDatabase.update(TABLE_USER_ANIMAL, cv, whereClause, whereArgs);
+
+        sqLiteDatabase.close();
     }
 
 
