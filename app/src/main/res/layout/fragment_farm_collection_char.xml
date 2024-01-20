@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    app:layout_anchorGravity="center"
     tools:context=".activity.FarmCollectionChar">
 
     <LinearLayout
@@ -14,14 +16,51 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <TextView
-            android:id="@+id/currentCharName"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="351dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/currentCharName"
+                android:layout_width="355dp"
+                android:layout_height="40dp"
+                android:fontFamily="@font/barlow_bold"
+                android:text="(Name)"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.042" />
+
+            <ImageButton
+                android:id="@+id/editNameBtn"
+                android:layout_width="30dp"
+                android:layout_height="38dp"
+                android:backgroundTint="#00FFFFFF"
+                android:scaleType="centerCrop"
+                android:src="@drawable/edit_thought_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.037" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/newAnimalBtn"
+            android:layout_width="298dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#98C5CF"
             android:fontFamily="@font/barlow_bold"
-            android:text=""
-            android:textAlignment="center"
-            android:textSize="24sp" />
+            android:foregroundGravity="center_vertical|center_horizontal"
+            android:text="Raise New Animal"
+            android:textColor="#FFFFFF" />
 
         <LinearLayout
             android:layout_width="351dp"
@@ -42,8 +81,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-            >
+                android:layout_gravity="center_horizontal">
 
                 <ProgressBar
                     android:id="@+id/happinessMeterBar"
@@ -77,12 +115,23 @@
             android:text="Collection"
             android:textColor="#616161" />
 
+        <TextView
+            android:id="@+id/noAnimalsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/barlow_bold"
+            android:gravity="center"
+            android:text="No Animals In Collection" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/collectionCharRecyclerView"
             android:layout_width="351dp"
             android:layout_height="239dp"
             android:layout_gravity="center"
-            android:orientation="horizontal" />
+            android:orientation="horizontal">
+
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
 </FrameLayout>
