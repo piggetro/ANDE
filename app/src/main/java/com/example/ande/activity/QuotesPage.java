@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,7 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -104,7 +105,7 @@ public class QuotesPage extends AppCompatActivity implements View.OnClickListene
         {
             @Override
             public void onItemClicked(Quote quote) {
-                Toast.makeText(QuotesPage.this, quote.getQuote(), Toast.LENGTH_SHORT).show();
+                showDialog(quote);
             }
 
 
@@ -130,11 +131,18 @@ public class QuotesPage extends AppCompatActivity implements View.OnClickListene
     }
 
 
-    public void showDialog(String quoteText) {
+    @SuppressLint("SetTextI18n")
+    public void showDialog(Quote quote) {
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottomsheetlayout_thoughtsexpansionpage_thought);
+        dialog.setContentView(R.layout.bottomsheetlayout_quotespage_quote);
+
+        TextView thoughtsExpansionBottomSheetTitle = dialog.findViewById(R.id.quoteBottomSheetText);
+        thoughtsExpansionBottomSheetTitle.setText("\"" + quote.getQuote() + "\"");
+
+        TextView thoughtsExpansionBottomSheetThoughtText = dialog.findViewById(R.id.quoteBottomSheetAuthor);
+        thoughtsExpansionBottomSheetThoughtText.setText("- " + quote.getAuthor());
 
 
 
