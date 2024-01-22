@@ -76,8 +76,7 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                month++;
-                String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", month, dayOfMonth, year);
+                String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", (month + 1), dayOfMonth, year);
                 selectedDate = dayOfMonth + " " + getMonthName(month) + " " + year;
                 selectedAbbreviatedMonthDate = dayOfMonth + " " + getAbbreviatedMonthName(month) + " " + year;
                 String selectedDateWithouthYear = dayOfMonth + " " + getMonthName(month);
