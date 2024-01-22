@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
+import com.example.ande.helpers.DateConverter;
 import com.example.ande.helpers.SessionManagement;
 
 public class AddThoughtPage extends AppCompatActivity implements View.OnClickListener {
@@ -16,6 +17,7 @@ public class AddThoughtPage extends AppCompatActivity implements View.OnClickLis
     DBHandler db = new DBHandler(this);
     String selectedAbbreviatedMonthDate;
     String selectedDate;
+    String convertedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class AddThoughtPage extends AppCompatActivity implements View.OnClickLis
         if (intent != null) {
             selectedAbbreviatedMonthDate = intent.getStringExtra("abbreviatedDate");
             selectedDate = intent.getStringExtra("date");
+            convertedDate = DateConverter.convertToMMddyyyyFormat(selectedDate);
         }
     }
 
@@ -43,7 +46,7 @@ public class AddThoughtPage extends AppCompatActivity implements View.OnClickLis
             SessionManagement sessionManagement = new SessionManagement(AddThoughtPage.this);
             int userId = sessionManagement.getSession();
 
-            db.addThought(userId, thoughtText);
+            db.addThought(userId, thoughtText, convertedDate);
 
             Intent intent = new Intent(this, ThoughtsExpansionPage.class);
             intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);

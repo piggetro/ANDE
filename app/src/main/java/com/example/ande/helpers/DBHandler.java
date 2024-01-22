@@ -301,12 +301,13 @@ public class DBHandler extends SQLiteOpenHelper {
         return thoughtsList;
     }
 
-    public void addThought(int userId, String thoughts) {
+    public void addThought(int userId, String thoughts, String date) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_USER_THOUGHTS_USER_ID, userId);
         cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughts);
+        cv.put(KEY_USER_THOUGHTS_DATE, date);
 
         sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
 
