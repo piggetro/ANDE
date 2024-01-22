@@ -436,6 +436,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(KEY_USER_MOOD_MOOD, mood);
 
         sqLiteDatabase.insert(TABLE_USER_MOOD, null, cv);
+        addPointsToUserAnimal(userId, 30);
 
         sqLiteDatabase.close();
     }
