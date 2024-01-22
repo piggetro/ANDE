@@ -24,6 +24,7 @@ import com.example.ande.helpers.DBHandler;
 import com.example.ande.helpers.DateConverter;
 import com.example.ande.helpers.QuoteRecylerItemArrayAdapter;
 import com.example.ande.helpers.SessionManagement;
+import com.example.ande.helpers.SpacingItemDecorator;
 import com.example.ande.model.Quote;
 
 import java.util.ArrayList;
@@ -93,7 +94,8 @@ public class QuotesPage extends AppCompatActivity implements View.OnClickListene
         mRecyclerView = findViewById(R.id.quotesRecyclerView);
         //Linear Layout Manager
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(QuotesPage.this, RecyclerView.VERTICAL, false);
-
+        SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(-100);
+        mRecyclerView.addItemDecoration(spacingItemDecorator);
         //Set Layout Manager to RecyclerView
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
