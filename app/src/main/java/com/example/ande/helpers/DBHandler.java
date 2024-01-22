@@ -367,6 +367,43 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.close();
     }
 
+    public void deductPointsFromUserAnimal(int userId, int points){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        String[] columns = {KEY_USER_ANIMAL_ANIMAL_ID, KEY_USER_ANIMAL_POINT, KEY_USER_ANIMAL_ISACTIVE};
+        String selection = KEY_USER_ANIMAL_USER_ID + " = ? AND " + KEY_USER_ANIMAL_ISACTIVE + " = 1";
+        String[] selectionArgs = {String.valueOf(userId)};
+
+        Cursor cursor = sqLiteDatabase.query(TABLE_USER_ANIMAL, columns, selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int animalIdColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_ANIMAL_ID);
+            int pointsColumnIndex = cursor.getColumnIndex(KEY_USER_ANIMAL_POINT);
+
+            if (animalIdColumnIndex != -1 && pointsColumnIndex != -1) {
+                int animalId = cursor.getInt(animalIdColumnIndex);
+                int currentPoints = cursor.getInt(pointsColumnIndex);
+
+                int minPoints = 0;
+
+                int newTotalPoints = Math.max(currentPoints - points, minPoints);
+
+                ContentValues cv = new ContentValues();
+                cv.put(KEY_USER_ANIMAL_POINT, newTotalPoints);
+
+                String whereClause = KEY_USER_ANIMAL_USER_ID + " = ? AND " + KEY_USER_ANIMAL_ANIMAL_ID + " = ?";
+                String[] whereArgs = {String.valueOf(userId), String.valueOf(animalId)};
+
+                sqLiteDatabase.update(TABLE_USER_ANIMAL, cv, whereClause, whereArgs);
+            } else {
+                Log.e("DBHandler", "Column not found: " + KEY_USER_ANIMAL_ANIMAL_ID + " or " + KEY_USER_ANIMAL_POINT);
+            }
+        }
+
+        cursor.close();
+        sqLiteDatabase.close();
+    }
+
     public int getAnimalMaxPoints(int animalId) {
         SQLiteDatabase db = this.getReadableDatabase();
 

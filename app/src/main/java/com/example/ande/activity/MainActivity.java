@@ -6,14 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -42,6 +45,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String mood;
     private int userId;
 
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        long lastActiveMillis = prefs.getLong("lastActiveDate", 0);
+        long currentMillis = System.currentTimeMillis();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(lastActiveMillis);
+        int lastActiveDay = calendar.get(Calendar.DAY_OF_YEAR);
+
+        calendar.setTimeInMillis(currentMillis);
+        int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
+
+        if (lastActiveDay != currentDay) {
+            checkLoginStreak(lastActiveDay, currentDay);
+            prefs.edit().putLong("lastActiveDate", currentMillis).apply();
+        }
+    }
+
+    private void checkLoginStreak(int lastActiveDay, int currentDay) {
+        CollectionChar currentChar = dbHandler.getActiveUserAnimal(userId, MainActivity.this);
+        if (currentChar != null) {
+            if (lastActiveDay == currentDay - 1) {
+                // User was active yesterday
+                dbHandler.addPointsToUserAnimal(userId, 5);
+                showCheckInModal(0);
+            } else if (lastActiveDay < currentDay - 1) {
+                // User missed one or more days
+                int daysMissed = currentDay - lastActiveDay - 1;
+                dbHandler.deductPointsFromUserAnimal(userId, 10 * daysMissed);
+                showCheckInModal(daysMissed);
+            }
+        }
+        // If lastActiveDay == currentDay, do nothing (user already opened app today)
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -233,6 +271,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String formattedDate = dateFormat.format(currentDate);
 
         return formattedDate;
+    }
+
+
+
+    private void showCheckInModal(int daysMissed) {
+        // Create a Dialog instance
+        Dialog dialog = new Dialog(this);
+
+        // Set the custom layout
+        dialog.setContentView(R.layout.check_in_modal);
+
+        // Find views and set values or listeners
+        TextView missedDaysTextView = dialog.findViewById(R.id.missedDaysTextView);
+        TextView conditionPetTextView = dialog.findViewById(R.id.conditionPetTextView);
+       ImageView petConditionImage = dialog.findViewById(R.id.petConditionImage);
+        CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, MainActivity.this);
+        missedDaysTextView.setText("");
+
+        petConditionImage.setImageResource(currentCharacter.getImage());
+        Button button = dialog.findViewById(R.id.customModalButton);
+
+
+        String message;
+        conditionPetTextView.setText("You've made your pet happier by checking in today!");
+        if (daysMissed >= 1) {
+            message = "You've missed " + daysMissed + " days. ";
+            missedDaysTextView.setVisibility(View.VISIBLE);
+            missedDaysTextView.setText(message);
+            conditionPetTextView.setText("Your pet missed you dearly.");
+        } else {
+            missedDaysTextView.setText("");
+        }
+        button.setOnClickListener(v -> dialog.dismiss());
+
+
+        Window window = dialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            layoutParams.copyFrom(window.getAttributes());
+            layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(layoutParams);
+        }
+        // Show the dialog
+        dialog.show();
     }
 
 }
