@@ -14,10 +14,10 @@ public class Quote {
         this.author = author;
     }
 
-    public Quote(String quote, String author, String category) {
+    public Quote(String quoteId, String quote, String author) {
+        this.quoteId = Integer.parseInt(quoteId);
         this.quote = quote;
         this.author = author;
-        this.category = category;
     }
 
     public Quote(int quoteId, String quote, String author, String category) {

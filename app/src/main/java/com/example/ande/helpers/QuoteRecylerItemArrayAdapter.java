@@ -27,7 +27,7 @@ public class QuoteRecylerItemArrayAdapter extends RecyclerView.Adapter<QuoteRecy
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate RecyclerView row
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_thought_recycler_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_quote_recycler_item, parent, false);
 
         // Create View Holder
         final MyViewHolder myViewHolder = new MyViewHolder(view);

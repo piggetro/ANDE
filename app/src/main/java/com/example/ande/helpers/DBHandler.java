@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.ande.model.Animal;
 import com.example.ande.model.CollectionChar;
+import com.example.ande.model.Quote;
 import com.example.ande.model.Thought;
 import com.example.ande.model.User;
 
@@ -764,6 +765,43 @@ public List<Animal> getAllAnimalTypes(Context context) {
 
         sqLiteDatabase.close();
     }
+
+    // Quote Table
+
+    public ArrayList<Quote> getQuotesByCategory(String category) {
+        ArrayList<Quote> quotesList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+
+        String[] columns = {KEY_QUOTE_ID, KEY_QUOTE_TEXT, KEY_QUOTE_AUTHOR};
+        String selection = KEY_QUOTE_CATEGORY + " = ?";
+        String[] selectionArgs = {category.toLowerCase()};
+        String orderBy = null;
+
+        Cursor cursor = category.equals("All") ? db.query(TABLE_QUOTE, columns, null, null, null, null, null) : db.query(TABLE_QUOTE, columns, selection, selectionArgs, null, null, null);
+
+        if (cursor != null) {
+            int idIndex = cursor.getColumnIndex(KEY_QUOTE_ID);
+            int quoteTextIndex = cursor.getColumnIndex(KEY_QUOTE_TEXT);
+            int quoteAuthorIndex = cursor.getColumnIndex(KEY_QUOTE_AUTHOR);
+
+            while (cursor.moveToNext()) {
+                if (idIndex != -1 && quoteTextIndex != -1 && quoteAuthorIndex != -1) {
+                    String quoteText = cursor.getString(quoteTextIndex);
+                    String quoteAuthor = cursor.getString(quoteAuthorIndex);
+                    quotesList.add(new Quote(quoteText, quoteAuthor));
+                } else {
+                    Log.e("DBHandler", "Column not found: " + KEY_QUOTE_ID + " or " + KEY_QUOTE_TEXT + " or " + KEY_QUOTE_AUTHOR);
+                }
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return quotesList;
+    }
+
+
 
 
 }

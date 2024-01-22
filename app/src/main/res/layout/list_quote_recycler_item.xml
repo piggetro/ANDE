@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
@@ -20,13 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/quoteText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/barlow_bold"
+                android:fontFamily="@font/barlow_italic"
                 android:textColor="#7DA9AC"
                 android:textSize="20sp" />
 
@@ -35,7 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:fontFamily="@font/barlow_regular"
+                android:layout_marginTop="8px"
+                android:fontFamily="@font/barlow_semibold"
                 android:maxLines="2"
                 android:singleLine="true"
                 android:textColor="#7DA9AC"

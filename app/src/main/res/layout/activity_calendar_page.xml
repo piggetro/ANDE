@@ -63,11 +63,11 @@
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:id="@+id/viewMoreCalendar"
+                    android:id="@+id/quotesForYouCalendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:src="@drawable/view_more" />
+                    android:src="@drawable/quotes_for_you" />
             </LinearLayout>
 
             <LinearLayout
