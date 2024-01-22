@@ -3,10 +3,13 @@ package com.example.ande.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,10 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
     private String thought;
     private String meditate;
     private int userId;
+    private LinearLayout calendarMoodView;
+    private LinearLayout calendarThoughtsView;
+    private LinearLayout calendarMeditationView;
+    private ImageView viewMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,10 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
         moodView = findViewById(R.id.calendarMood);
         thoughtView = findViewById(R.id.calendarThoughtsText);
         mediateView = findViewById(R.id.calendarMeditationText);
+        calendarMoodView = findViewById(R.id.calendarMoodView);
+        calendarThoughtsView = findViewById(R.id.calendarThoughts);
+        calendarMeditationView = findViewById(R.id.calendarMeditationView);
+        viewMore = findViewById(R.id.viewMoreCalendar);
         dbHandler = new DBHandler(CalendarPage.this);
         SessionManagement sessionManagement = new SessionManagement(CalendarPage.this);
         userId = sessionManagement.getSession();
@@ -85,6 +96,30 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
                 mood = dbHandler.getMood(userId, formattedDate);
                 thought = dbHandler.getLatestThought(userId, formattedDate);
                 meditate = dbHandler.getMeditationTime(userId, formattedDate);
+
+                if (!getTodayDateMMDDYYYY().equals(formattedDate)){
+                    moodView.setImageAlpha(0x3F);
+                    viewMore.setImageAlpha(0x3F);
+                    viewMore.setEnabled(false);
+                    calendarThoughtsView.setEnabled(false);
+                    calendarMoodView.setBackgroundResource(R.drawable.grey_mood);
+                    calendarThoughtsView.setBackgroundResource(R.drawable.grey_thoughts);
+                    calendarMeditationView.setBackgroundResource(R.drawable.grey_meditation);
+                    mediateView.setTextColor(Color.parseColor("#808080"));
+                    thoughtView.setTextColor(Color.parseColor("#808080"));
+                    dateTextView.setTextColor(Color.parseColor("#808080"));
+                } else {
+                    calendarThoughtsView.setEnabled(true);
+                    viewMore.setEnabled(true);
+                    moodView.setImageAlpha(0xFF);
+                    viewMore.setImageAlpha(0xFF);
+                    calendarMoodView.setBackgroundResource(R.drawable.mood);
+                    calendarThoughtsView.setBackgroundResource(R.drawable.thoughts);
+                    calendarMeditationView.setBackgroundResource(R.drawable.meditation);
+                    mediateView.setTextColor(Color.parseColor("#7DA9AC"));
+                    thoughtView.setTextColor(Color.parseColor("#7DA9AC"));
+                    dateTextView.setTextColor(Color.parseColor("#7DA9AC"));
+                }
 
                 mediateView.setText(meditate + " Minutes");
 
