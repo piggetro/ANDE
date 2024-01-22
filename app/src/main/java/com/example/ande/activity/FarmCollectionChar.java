@@ -171,22 +171,7 @@ public class FarmCollectionChar extends Fragment {
             Log.e("maxPoints", String.valueOf(maxPoints));
         }
 
-        int finalMaxPoints = maxPoints;
-
-        int finalCurrentPoints = currentPoints;
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                happinessMeter.setProgress(0);
-                happinessMeter.setMax(finalMaxPoints);
-                happinessMeter.setProgress(finalCurrentPoints);
-
-                String currentPointsText = finalCurrentPoints + "/" + finalMaxPoints;
-                currentPointsTextView.setText(currentPointsText);
-            }
-        });
-
-
+        updateProgressBar();
     }
     private void navigateToAnimalViewerActivity(int position) {
         Intent intent = new Intent(getActivity(), AnimalViewerActivity.class);
@@ -214,7 +199,9 @@ public class FarmCollectionChar extends Fragment {
                 // Handle the selection, e.g., show a toast
                 dbHandler.addUserAnimal(userId, selectedAnimal.getAnimalId(), selectedAnimal.getType());
                 Toast.makeText(getContext(), "Set " + selectedAnimal.getType() +" , happy raising!", Toast.LENGTH_LONG).show();
+                updateProgressBar();
                 if (getActivity() != null) {
+
                     getActivity().recreate();
                 }
             }
@@ -259,6 +246,30 @@ public class FarmCollectionChar extends Fragment {
     private boolean validatePetName(String name) {
         // Implement your validation logic here
         return name != null && !name.trim().isEmpty();
+    }
+
+    private void updateProgressBar() {
+        // Check if the view is available
+        if (getView() == null) {
+            return;
+        }
+
+        TextView charNameTextView = getView().findViewById(R.id.currentCharName);
+        CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, getContext());
+        happinessMeter = getView().findViewById(R.id.happinessMeterBar);
+        TextView currentPointsTextView = getView().findViewById(R.id.progressText);
+
+        int currentPoints = currentCharacter.getCurrentPoints();
+        int maxPoints = dbHandler.getAnimalMaxPoints(currentCharacter.getAnimalId());
+
+        getActivity().runOnUiThread(() -> {
+            happinessMeter.setProgress(0);
+            happinessMeter.setMax(maxPoints);
+            happinessMeter.setProgress(currentPoints);
+
+            String currentPointsText = currentPoints + "/" + maxPoints;
+            currentPointsTextView.setText(currentPointsText);
+        });
     }
 
 
