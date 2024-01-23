@@ -1,5 +1,8 @@
 package com.example.ande.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -7,12 +10,26 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ande.helpers.AnimalTypeListAdapter;
 import com.example.ande.helpers.CollectionCharAdapter;
 import com.example.ande.R;
+import com.example.ande.helpers.DBHandler;
+import com.example.ande.helpers.SessionManagement;
+import com.example.ande.model.Animal;
+import com.example.ande.model.CollectionChar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +50,14 @@ public class FarmCollectionChar extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private int userId;
     private RecyclerView recyclerView;
     private CollectionCharAdapter adapter;
     private List<CollectionChar> characterList = new ArrayList<>();
+    private DBHandler dbHandler;
+    private ProgressBar happinessMeter;
 
+    private String currentPointsText;
     public FarmCollectionChar() {
         // Required empty public constructor
     }
@@ -67,6 +88,9 @@ public class FarmCollectionChar extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
+        dbHandler = new DBHandler(getContext());
+        SessionManagement sessionManagement = new SessionManagement(getContext());
+        userId = sessionManagement.getSession();
 
     }
 
@@ -84,25 +108,166 @@ public class FarmCollectionChar extends Fragment {
         recyclerView = view.findViewById(R.id.collectionCharRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setHasFixedSize(true);
+        TextView noAnimalsTextView = view.findViewById(R.id.noAnimalsTextView);
+        Button newAnimalButton = view.findViewById(R.id.newAnimalBtn);
+        ImageButton editNameBtn = view.findViewById(R.id.editNameBtn);
 
+        newAnimalButton.setVisibility(View.GONE);
+        noAnimalsTextView.setVisibility(View.GONE);
 
+        int currentProgress = 0;
         // Initialize your characters list here or in a separate method
         characterList = getCharacterList();
-        adapter = new CollectionCharAdapter(view.getContext(), characterList);
-        recyclerView.setAdapter(adapter);
-    }
+        if (characterList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            noAnimalsTextView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+            recyclerView.setHasFixedSize(true);
 
+            adapter = new CollectionCharAdapter(view.getContext(), characterList, new CollectionCharAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    navigateToAnimalViewerActivity(position);
+                }
+            });
+            recyclerView.setAdapter(adapter);
+        }
+
+
+        TextView charNameTextView = view.findViewById(R.id.currentCharName);
+        CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, getContext());
+        happinessMeter = view.findViewById(R.id.happinessMeterBar);
+        TextView currentPointsTextView = view.findViewById(R.id.progressText);
+
+        int currentPoints = 0;
+        int maxPoints = 100;
+        if(currentCharacter.getAnimalId() == -1) {
+//            charNameTextView.setText("");
+            editNameBtn.setVisibility(View.GONE);
+            charNameTextView.setVisibility(View.GONE);
+            newAnimalButton.setVisibility(View.VISIBLE);
+            newAnimalButton.setOnClickListener(v -> {
+                showAnimalListDialog();
+            });
+        } else {
+
+            editNameBtn.setOnClickListener(v -> {
+                showEditPetNameDialog(currentCharacter);
+            });
+            charNameTextView.setText(currentCharacter.getName());
+            currentPoints = currentCharacter.getCurrentPoints();
+            maxPoints = dbHandler.getAnimalMaxPoints(currentCharacter.getAnimalId());
+
+            if (currentPoints >= maxPoints) {
+                newAnimalButton.setVisibility(View.VISIBLE);
+                newAnimalButton.setOnClickListener(v -> {
+                    showAnimalListDialog();
+                });
+            }
+        }
+
+        updateProgressBar();
+    }
+    private void navigateToAnimalViewerActivity(int position) {
+        Intent intent = new Intent(getActivity(), AnimalViewerActivity.class);
+        intent.putExtra("position", position); // Pass the clicked position
+        startActivity(intent);
+    }
     private List<CollectionChar> getCharacterList() {
-        // Create or fetch your characters here
-        // For example:
-        characterList.add(new CollectionChar("Oink", R.drawable.emotioncows));
-        characterList.add(new CollectionChar("What", R.drawable.happycow));
-        characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
-        characterList.add(new CollectionChar("Oink", R.drawable.emotioncows));
-        characterList.add(new CollectionChar("What", R.drawable.happycow));
-        characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
-        characterList.add(new CollectionChar("Meow", R.drawable.neutral_pig));
+      characterList = dbHandler.getAllUserAnimals(userId, getContext());
 
         return characterList;
     }
+
+    private void showAnimalListDialog() {
+        List<Animal> animals = dbHandler.getAllAnimalTypes(this.getContext());
+
+        AnimalTypeListAdapter adapter = new AnimalTypeListAdapter(this.getContext(), R.layout.item_animal_type, animals);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        builder.setTitle("Choose an animal to raise");
+
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // 'which' is the index of the selected item
+                Animal selectedAnimal = animals.get(which);
+                // Handle the selection, e.g., show a toast
+                dbHandler.addUserAnimal(userId, selectedAnimal.getAnimalId(), selectedAnimal.getType());
+                Toast.makeText(getContext(), "Set " + selectedAnimal.getType() +" , happy raising!", Toast.LENGTH_LONG).show();
+                updateProgressBar();
+                if (getActivity() != null) {
+
+                    getActivity().recreate();
+                }
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void showEditPetNameDialog(CollectionChar pet) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Edit Pet Name");
+
+        // Set up the input
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(pet.getName()); // Set current name
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newName = input.getText().toString();
+                if (validatePetName(newName)) {
+                    // Update name in the database
+                    dbHandler.updateAnimalName(userId, newName);
+                    // Refresh data
+                    if (getActivity() != null) {
+                        getActivity().recreate();
+                    }
+
+                } else {
+                    Toast.makeText(getContext(), "Invalid name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private boolean validatePetName(String name) {
+        // Implement your validation logic here
+        return name != null && !name.trim().isEmpty();
+    }
+
+    private void updateProgressBar() {
+        // Check if the view is available
+        if (getView() == null) {
+            return;
+        }
+
+        TextView charNameTextView = getView().findViewById(R.id.currentCharName);
+        CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, getContext());
+        happinessMeter = getView().findViewById(R.id.happinessMeterBar);
+        TextView currentPointsTextView = getView().findViewById(R.id.progressText);
+
+        int currentPoints = currentCharacter.getCurrentPoints();
+        int maxPoints = dbHandler.getAnimalMaxPoints(currentCharacter.getAnimalId());
+
+        getActivity().runOnUiThread(() -> {
+            happinessMeter.setProgress(0);
+            happinessMeter.setMax(maxPoints);
+            happinessMeter.setProgress(currentPoints);
+
+            String currentPointsText = currentPoints + "/" + maxPoints;
+            currentPointsTextView.setText(currentPointsText);
+        });
+    }
+
+
 }

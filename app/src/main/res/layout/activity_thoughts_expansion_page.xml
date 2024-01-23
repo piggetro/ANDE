@@ -26,10 +26,9 @@
             app:srcCompat="@drawable/arrow_back" />
 
         <TextView
-            android:id="@+id/thoughtsExpansionDateText"
+            android:id="@+id/thoughtsExpansionAbbreviatedDateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="24 NOV 23"
             android:fontFamily="@font/barlow_bold"
             android:textColor="#FFFFFF"
             android:textSize="13dp"
@@ -45,9 +44,9 @@
             android:textAlignment="center" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/thoughtsExpansionPageMoodImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100.14dp"
             android:layout_marginTop="20dp"
             app:srcCompat="@drawable/star_eyes_smiling_emoji" />
 
@@ -60,7 +59,7 @@
             app:boxBackgroundColor="@android:color/white" >
 
             <AutoCompleteTextView
-                android:id="@+id/auto_complete_text_view"
+                android:id="@+id/auto_complete_meditation_minutes_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -78,7 +77,8 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addThoughtButton"
+        android:id="@+id/addThoughtFloatingActionButton"
+        android:onClick="onClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"

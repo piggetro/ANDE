@@ -9,110 +9,133 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
-        <ImageView
-            android:id="@+id/settingsButton"
-            android:onClick="onClick"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:scaleType="fitCenter"
-            android:layout_gravity="right"
-            android:padding="20dp"
-            app:srcCompat="@drawable/settings" />
+    <ImageView
+        android:id="@+id/settingsButton"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_gravity="right"
+        android:onClick="onClick"
+        android:padding="20dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/settings" />
 
-        <TextView
-            android:id="@+id/logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="How are you feeling today?"
-            android:fontFamily="@font/barlow_bold"
-            android:textColor="#FFFFFF"
-            android:textSize="26dp"
-            android:textAlignment="center"
-            android:shadowColor="#000000"
-            android:shadowDx="0"
-            android:shadowDy="3"
-            android:shadowRadius="6" />
+    <TextView
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/barlow_bold"
+        android:shadowColor="#000000"
+        android:shadowDx="0"
+        android:shadowDy="3"
+        android:shadowRadius="6"
+        android:text="How are you feeling today?"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="26dp" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_marginTop="-120dp"
-            app:srcCompat="@drawable/homepage_emoji" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginTop="20dp"
+        android:adjustViewBounds="true"
+        android:onClick="onClick"
+        app:srcCompat="@drawable/homepage_emoji" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginTop="-150dp"
-            android:gravity="center">
+            android:layout_gravity="center"
+            android:elevation="30dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+            <ImageView
+                android:id="@+id/farmButton"
+                android:layout_width="188dp"
+                android:layout_height="260dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="7dp"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:onClick="onClick"
+                android:scaleType="center"
+                android:scaleX="1"
+                android:scaleY="1"
 
-                <ImageView
-                    android:id="@+id/farmButton"
-                    android:layout_width="196dp"
-                    android:layout_height="381dp"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="false"
-                    android:cropToPadding="false"
-                    android:scaleType="center"
-                    android:scaleX="1"
-                    android:scaleY="1"
-                    android:onClick="onClick"
-                    android:src="@drawable/farm_button_homepage" />
-            </LinearLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.074"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.342"
+                app:srcCompat="@drawable/farm_button" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginTop="40dp"
-                android:gravity="center">
+            <Button
+                android:id="@+id/meditationButton"
+                android:layout_width="188dp"
+                android:layout_height="119dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/custom_button"
+                android:drawableTop="@drawable/meditation_plant_image"
+                android:fontFamily="@font/barlow_bold"
+                android:onClick="onClick"
+                android:padding="3dp"
+                android:text="Meditation"
+                android:textColor="#7DA9AC"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.2"
+                app:layout_constraintStart_toEndOf="@+id/farmButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.15" />
 
-                <Button
-                    android:id="@+id/meditationButton"
-                    android:onClick="onClick"
-                    android:layout_width="173dp"
-                    android:layout_height="104.832298137dp"
-                    android:drawableTop="@drawable/meditation_plant_image"
-                    android:text="Meditation"
-                    android:fontFamily="@font/barlow_bold"
-                    android:textColor="#7DA9AC"
-                    android:background="@drawable/custom_button"
-                    android:padding="3dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_gravity="center" />
+            <Button
+                android:id="@+id/calendarButton"
+                android:layout_width="183dp"
+                android:layout_height="117dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/custom_button"
+                android:drawableTop="@drawable/calendar"
+                android:drawablePadding="-8dp"
+                android:fontFamily="@font/barlow_bold"
+                android:onClick="onClick"
+                android:paddingTop="15dp"
+                android:text="Calendar"
+                android:textColor="#7DA9AC"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/farmButton"
+                app:layout_constraintTop_toBottomOf="@+id/meditationButton"
+                app:layout_constraintVertical_bias="0.072" />
 
-                <Button
-                    android:id="@+id/calendarButton"
-                    android:onClick="onClick"
-                    android:layout_width="173dp"
-                    android:layout_height="104.832298137dp"
-                    android:drawableTop="@drawable/calendar"
-                    android:drawablePadding="-8dp"
-                    android:text="Calendar"
-                    android:fontFamily="@font/barlow_bold"
-                    android:textColor="#7DA9AC"
-                    android:paddingTop="15dp"
-                    android:background="@drawable/custom_button"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
-        </LinearLayout>
+</LinearLayout>
 
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/homePageAnimalImg"
+        android:layout_width="148dp"
+        android:layout_height="142dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.06"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499"
+        app:srcCompat="@drawable/pet_happy_cow" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

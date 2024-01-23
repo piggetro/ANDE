@@ -10,13 +10,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="57dp"
             android:layout_height="61dp"
             android:background="#00FFFFFF"
+            android:onClick="onClick"
             android:src="@drawable/arrow_back" />
 
         <TextView
@@ -42,12 +47,12 @@
             android:scaleY="1"
             android:translationY="100px"
             android:translationZ="10px"
-            app:srcCompat="@drawable/neutral_pig" />
+            app:srcCompat="@drawable/pet_neutral_pig" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="477dp"
+            android:layout_height="473dp"
             android:background="@drawable/rounded_border"
             android:orientation="vertical"
             android:paddingHorizontal="35dp"
@@ -55,8 +60,9 @@
 
             <FrameLayout
                 android:id="@+id/fragment_CharacterDetailCollection"
-                android:layout_width="match_parent"
+                android:layout_width="401dp"
                 android:layout_height="380dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="30dp">
 
             </FrameLayout>
