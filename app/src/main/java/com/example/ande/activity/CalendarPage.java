@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ImageView;
@@ -36,7 +35,7 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
     private LinearLayout calendarMoodView;
     private LinearLayout calendarThoughtsView;
     private LinearLayout calendarMeditationView;
-    private ImageView viewMore;
+    private ImageView quotesForYou;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,7 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
         calendarMoodView = findViewById(R.id.calendarMoodView);
         calendarThoughtsView = findViewById(R.id.calendarThoughts);
         calendarMeditationView = findViewById(R.id.calendarMeditationView);
-        viewMore = findViewById(R.id.viewMoreCalendar);
+        quotesForYou = (ImageView) findViewById(R.id.quotesForYouCalendar);
         dbHandler = new DBHandler(CalendarPage.this);
         SessionManagement sessionManagement = new SessionManagement(CalendarPage.this);
         userId = sessionManagement.getSession();
@@ -99,8 +98,8 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
 
                 if (!getTodayDateMMDDYYYY().equals(formattedDate)){
                     moodView.setImageAlpha(0x3F);
-                    viewMore.setImageAlpha(0x3F);
-                    viewMore.setEnabled(false);
+                    quotesForYou.setImageAlpha(0x3F);
+                    quotesForYou.setEnabled(false);
                     calendarThoughtsView.setEnabled(false);
                     calendarMoodView.setBackgroundResource(R.drawable.grey_mood);
                     calendarThoughtsView.setBackgroundResource(R.drawable.grey_thoughts);
@@ -110,9 +109,9 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
                     dateTextView.setTextColor(Color.parseColor("#808080"));
                 } else {
                     calendarThoughtsView.setEnabled(true);
-                    viewMore.setEnabled(true);
+                    quotesForYou.setEnabled(true);
                     moodView.setImageAlpha(0xFF);
-                    viewMore.setImageAlpha(0xFF);
+                    quotesForYou.setImageAlpha(0xFF);
                     calendarMoodView.setBackgroundResource(R.drawable.mood);
                     calendarThoughtsView.setBackgroundResource(R.drawable.thoughts);
                     calendarMeditationView.setBackgroundResource(R.drawable.meditation);
@@ -189,9 +188,13 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
         if (v.getId() == R.id.calendarBackButton) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        } else if (v.getId() == R.id.calendarThoughts || v.getId() == R.id.viewMoreCalendar) {
+        } else if (v.getId() == R.id.calendarThoughts) {
             Intent intent = new Intent(this, ThoughtsExpansionPage.class);
             intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
+            intent.putExtra("date", selectedAbbreviatedMonthDate);
+            startActivity(intent);
+        } else if (v.getId() == R.id.quotesForYouCalendar) {
+            Intent intent = new Intent(this, QuotesPage.class);
             intent.putExtra("date", selectedAbbreviatedMonthDate);
             startActivity(intent);
         }

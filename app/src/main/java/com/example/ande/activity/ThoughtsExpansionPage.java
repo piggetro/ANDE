@@ -112,8 +112,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
     {
         //Reference of RecyclerView
         mRecyclerView = findViewById(R.id.thoughtsRecyclerView);
-        //Linear Layout Manager
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ThoughtsExpansionPage.this, RecyclerView.VERTICAL, false);
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(ThoughtsExpansionPage.this, 2);
 
         //Set Layout Manager to RecyclerView

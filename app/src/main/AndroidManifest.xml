@@ -16,6 +16,10 @@
         android:theme="@style/Theme.ANDE"
         tools:targetApi="31">
         <activity
+            android:name=".activity.QuotesPage"
+            android:exported="false"
+            android:theme="@style/MaterialComponentsLightNoActionBar" />
+        <activity
             android:name=".activity.EditThoughtPage"
             android:exported="false" />
         <activity

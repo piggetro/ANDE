@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.ande.model.Animal;
 import com.example.ande.model.CollectionChar;
+import com.example.ande.model.Quote;
 import com.example.ande.model.Thought;
 import com.example.ande.model.User;
 
@@ -59,6 +60,14 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_USER_MEDITATION_USER_ID = "user_id";
     private static final String KEY_USER_MEDITATION_MINUTES = "user_meditation_minutes";
     private static final String KEY_USER_MEDITATION_DATE = "date";
+
+
+    private static final String TABLE_QUOTE= "quote";
+    private static final String KEY_QUOTE_ID = "quote_id";
+    private static final String KEY_QUOTE_TEXT = "quote_text";
+    private static final String KEY_QUOTE_AUTHOR = "quote_author";
+    private static final String KEY_QUOTE_CATEGORY = "quote_category";
+
 
 
     public DBHandler(Context context) {
@@ -122,11 +131,55 @@ public class DBHandler extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + KEY_USER_MEDITATION_USER_ID + ") REFERENCES your_user_table_name(your_user_id_column_name)" +
                 ");";
 
+        String CREATE_TABLE_QUOTE = "CREATE TABLE " + TABLE_QUOTE + "(" +
+                KEY_QUOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                KEY_QUOTE_TEXT + " TEXT, " +
+                KEY_QUOTE_AUTHOR + " TEXT, " +
+                KEY_QUOTE_CATEGORY + " TEXT" +
+                ");";
+
         String multiRowInsert = "INSERT INTO " + TABLE_ANIMAL + " ( " + KEY_ANIMAL_TYPE + ", " + KEY_ANIMAL_MAX + ") VALUES " +
                 "('Pig', 100), " +
                 "('Rabbit', 200), " +
                 "('Chick', 200), " +
                 "('Cow', 300);";
+
+        String multiRowInsertHappyQuote = "INSERT INTO " + TABLE_QUOTE + " (" + KEY_QUOTE_TEXT + ", " + KEY_QUOTE_AUTHOR + ", " + KEY_QUOTE_CATEGORY + ") VALUES " +
+                "('If you want to be happy, set a goal that commands your thoughts, liberates your energy, and inspires your hopes.', 'Andrew Carnegie', 'happy'), " +
+                "('Pleasure can be supported by an illusion; but happiness rests upon truth.', 'Nicolas Chamfort', 'happy'), " +
+                "('What have you done today to make someone else happy?', 'Deepam Chaterjee', 'happy'), " +
+                "('To be happy we need something to solve. Happiness is therefore a form of action.', 'Mark Manson', 'happy'), " +
+                "('Just because you are happy it does not mean that the day is perfect but that you have looked beyond its imperfections.', 'Bob Marley', 'happy'), " +
+                "('Happiness comes when you believe in what you are doing, know what you are doing, and love what you are doing.', 'Brian Tracy', 'happy');";
+
+        String multiRowInsertSadQuote = "INSERT INTO " + TABLE_QUOTE + " (" + KEY_QUOTE_TEXT + ", " + KEY_QUOTE_AUTHOR + ", " + KEY_QUOTE_CATEGORY + ") VALUES " +
+                "('If you want to be happy, set a goal that commands your thoughts, liberates your energy, and inspires your hopes.', 'Andrew Carnegie', 'sad'), " +
+                "('Pleasure can be supported by an illusion; but happiness rests upon truth.', 'Nicolas Chamfort', 'sad'), " +
+                "('What have you done today to make someone else happy?', 'Deepam Chaterjee', 'sad'), " +
+                "('Men are anxious to improve their circumstances but are unwilling to improve themselves; they therefore remain bound.', 'James Allen', 'sad'), " +
+                "('Anxiety is the dizziness of freedom.', 'Soren Kierkegaard', 'sad'), " +
+                "('The secret of perfect health lies in keeping the mind always cheerful - never worried, never hurried, never borne down by any fear, thought or anxiety.', 'Sathya Sai Baba', 'sad'), " +
+                "('To be in harmony with the wholeness of things is not to have anxiety over imperfections.', 'Dogen', 'sad'), " +
+                "('If you are depressed, you are living in the past. If you are anxious, you are living in the future. if you are at peace, you are living in the present.', 'Lao Tzu', 'sad'), " +
+                "('Our anxiety does not empty tomorrow of its sorrows, but only empties today of its strengths.', 'Charles Spurgeon', 'sad');";
+
+        String multiRowInsertAngryQuote = "INSERT INTO " + TABLE_QUOTE + " (" + KEY_QUOTE_TEXT + ", " + KEY_QUOTE_AUTHOR + ", " + KEY_QUOTE_CATEGORY + ") VALUES " +
+                "('Reversing your treatment of the man you have wronged is better than asking his forgiveness.', 'Elbert Hubbard', 'angry'), " +
+                "('Forgive those who have hurt you.', 'Les Brown', 'angry'), " +
+                "('The weak can never forgive. Forgiveness is the attribute of the strong.', 'Mahatma Gandhi', 'angry'), " +
+                "('Forgive yourself for your faults and your mistakes and move on.', 'Les Brown', 'angry'), " +
+                "('It is important that we forgive ourselves for making mistakes. We need to learn from our errors and move on.', 'Steve Maraboli', 'angry'), " +
+                "('To forgive means pardoning the unpardonable.', 'Gilbert Chesterton', 'angry'), " +
+                "('Loving thoughts and actions are clearly beneficial for our physical and mental health.', 'Dalai Lama', 'angry'), " +
+                "('Kindness in words creates confidence. Kindness in thinking creates profoundness. Kindness in giving creates love.', 'Lao Tzu', 'angry'), " +
+                "('The greatest gift that you can give to others is the gift of unconditional love and acceptance.', 'Brian Tracy', 'angry');";
+
+        String multiRowInsertNeutralQuote = "INSERT INTO " + TABLE_QUOTE + " (" + KEY_QUOTE_TEXT + ", " + KEY_QUOTE_AUTHOR + ", " + KEY_QUOTE_CATEGORY + ") VALUES " +
+                "('Amateurs sit and wait for inspiration, the rest of us just get up and get to work.', 'Stephen King', 'neutral'), " +
+                "('Inspiration exists, but it has to find you working.', 'Pablo Picasso', 'neutral'), " +
+                "('If you want to be happy, set a goal that commands your thoughts, liberates your energy, and inspires your hopes.', 'Andrew Carnegie', 'neutral');";
+
+
 
         //TODO: ONLY FOR TESTING. Remove this after testing
         String multiRowInsertUser = "INSERT INTO " + TABLE_USER + " (" + KEY_USER_EMAIL + ", " + KEY_USER_USERNAME + ", " + KEY_USER_PASSWORD + ") VALUES " +
@@ -145,9 +198,14 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_USER_THOUGHTS);
         sqLiteDatabase.execSQL(CREATE_TABLE_USER_MOOD);
         sqLiteDatabase.execSQL(CREATE_TABLE_USER_MEDITATION);
+        sqLiteDatabase.execSQL(CREATE_TABLE_QUOTE);
 
 
         sqLiteDatabase.execSQL(multiRowInsert);
+        sqLiteDatabase.execSQL(multiRowInsertHappyQuote);
+        sqLiteDatabase.execSQL(multiRowInsertSadQuote);
+        sqLiteDatabase.execSQL(multiRowInsertAngryQuote);
+        sqLiteDatabase.execSQL(multiRowInsertNeutralQuote);
 
         //TODO: ONLY FOR TESTING. Remove this after testing
         sqLiteDatabase.execSQL(multiRowInsertUser);
@@ -707,6 +765,43 @@ public List<Animal> getAllAnimalTypes(Context context) {
 
         sqLiteDatabase.close();
     }
+
+    // Quote Table
+
+    public ArrayList<Quote> getQuotesByCategory(String category) {
+        ArrayList<Quote> quotesList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+
+        String[] columns = {KEY_QUOTE_ID, KEY_QUOTE_TEXT, KEY_QUOTE_AUTHOR};
+        String selection = KEY_QUOTE_CATEGORY + " = ?";
+        String[] selectionArgs = {category.toLowerCase()};
+        String orderBy = null;
+
+        Cursor cursor = category.equals("All") ? db.query(TABLE_QUOTE, columns, null, null, null, null, null) : db.query(TABLE_QUOTE, columns, selection, selectionArgs, null, null, null);
+
+        if (cursor != null) {
+            int idIndex = cursor.getColumnIndex(KEY_QUOTE_ID);
+            int quoteTextIndex = cursor.getColumnIndex(KEY_QUOTE_TEXT);
+            int quoteAuthorIndex = cursor.getColumnIndex(KEY_QUOTE_AUTHOR);
+
+            while (cursor.moveToNext()) {
+                if (idIndex != -1 && quoteTextIndex != -1 && quoteAuthorIndex != -1) {
+                    String quoteText = cursor.getString(quoteTextIndex);
+                    String quoteAuthor = cursor.getString(quoteAuthorIndex);
+                    quotesList.add(new Quote(quoteText, quoteAuthor));
+                } else {
+                    Log.e("DBHandler", "Column not found: " + KEY_QUOTE_ID + " or " + KEY_QUOTE_TEXT + " or " + KEY_QUOTE_AUTHOR);
+                }
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return quotesList;
+    }
+
+
 
 
 }
