@@ -2,9 +2,6 @@ package com.example.ande.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -13,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -94,7 +93,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 if (isValidEmail(email)) {
                     int user_id = dbHandler.loginUser(new User(email, password));
                     if (user_id != -1) {
-                        Toast.makeText(getContext(), "User ID" + user_id, Toast.LENGTH_SHORT).show();
                         SessionManagement sessionManagement = new SessionManagement(getContext());
                         sessionManagement.saveSession(new User(user_id));
                         emailEditText.getText().clear();
