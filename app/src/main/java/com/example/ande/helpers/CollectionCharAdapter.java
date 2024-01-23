@@ -45,7 +45,6 @@ public class CollectionCharAdapter extends RecyclerView.Adapter<CollectionCharVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("checkDara", String.valueOf(holder.getAdapterPosition()));
                 int adapterPosition = holder.getAdapterPosition();
                 if (adapterPosition != RecyclerView.NO_POSITION && listener != null) {
                     listener.onItemClick(adapterPosition);

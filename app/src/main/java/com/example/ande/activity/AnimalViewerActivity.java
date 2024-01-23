@@ -2,10 +2,7 @@ package com.example.ande.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -14,10 +11,8 @@ import com.example.ande.R;
 import com.example.ande.helpers.AnimalPagerAdapter;
 import com.example.ande.helpers.DBHandler;
 import com.example.ande.helpers.SessionManagement;
-import com.example.ande.model.Animal;
 import com.example.ande.model.CollectionChar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AnimalViewerActivity extends AppCompatActivity implements View.OnClickListener{
@@ -68,7 +63,6 @@ public class AnimalViewerActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        Log.e("checkData","wha");
         if (view.getId() == R.id.btnViewAllAnimalsBack){
 
             Intent intent = new Intent(this, FarmCollection.class);

@@ -1,7 +1,5 @@
 package com.example.ande.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +8,8 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -91,7 +90,6 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
                 selectedAbbreviatedMonthDate = dayOfMonth + " " + getAbbreviatedMonthName(month) + " " + year;
                 String selectedDateWithouthYear = dayOfMonth + " " + getMonthName(month);
                 dateTextView.setText(selectedDateWithouthYear);
-                Toast.makeText(CalendarPage.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
                 mood = dbHandler.getMood(userId, formattedDate);
                 thought = dbHandler.getLatestThought(userId, formattedDate);
                 meditate = dbHandler.getMeditationTime(userId, formattedDate);

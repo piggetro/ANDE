@@ -1,15 +1,10 @@
 package com.example.ande.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
@@ -25,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void checkLoginStreak(int lastActiveDay, int currentDay) {
         CollectionChar currentChar = dbHandler.getActiveUserAnimal(userId, MainActivity.this);
-        if (currentChar != null) {
+        if (currentChar.getAnimalId() != -1) {
             if (lastActiveDay == currentDay - 1) {
                 // User was active yesterday
                 dbHandler.addPointsToUserAnimal(userId, 5);
@@ -90,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         SessionManagement sessionManagement = new SessionManagement(MainActivity.this);
         userId = sessionManagement.getSession();
-
-        Toast.makeText(MainActivity.this, "User ID" + userId, Toast.LENGTH_SHORT).show();
 
         mood = dbHandler.getMood(userId, getTodayDate());
         CollectionChar currentCharacter = dbHandler.getActiveUserAnimal(userId, MainActivity.this);
@@ -151,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imageView.setImageResource(R.drawable.happy);
                 dbHandler.addMood(userId, "happy");
                 dialog.dismiss();
-                Toast.makeText(MainActivity.this, "Happy", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -162,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imageView.setImageResource(R.drawable.sad);
                 dbHandler.addMood(userId, "sad");
                 dialog.dismiss();
-                Toast.makeText(MainActivity.this, "Sad", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -173,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imageView.setImageResource(R.drawable.angry);
                 dbHandler.addMood(userId, "angry");
                 dialog.dismiss();
-                Toast.makeText(MainActivity.this, "Angry", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -184,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imageView.setImageResource(R.drawable.neutral);
                 dbHandler.addMood(userId, "neutral");
                 dialog.dismiss();
-                Toast.makeText(MainActivity.this, "Neutral", Toast.LENGTH_SHORT).show();
             }
         });
 

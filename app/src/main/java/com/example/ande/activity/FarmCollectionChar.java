@@ -166,9 +166,6 @@ public class FarmCollectionChar extends Fragment {
                     showAnimalListDialog();
                 });
             }
-
-            Log.e("currentPoints", String.valueOf(currentPoints));
-            Log.e("maxPoints", String.valueOf(maxPoints));
         }
 
         updateProgressBar();

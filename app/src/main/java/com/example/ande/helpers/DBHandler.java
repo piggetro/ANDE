@@ -187,10 +187,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 "('t2@gmail.com', 't', 't');";
 
         //TODO: ONLY FOR TESTING. Remove this after testing
-        String multiRowInsertUserAnimal = "INSERT INTO " + TABLE_USER_ANIMAL + " (" + KEY_USER_ANIMAL_USER_ID + ", " + KEY_USER_ANIMAL_ANIMAL_ID + ", " + KEY_USER_ANIMAL_NAME + ", " + KEY_USER_ANIMAL_POINT + ", " + KEY_USER_ANIMAL_ISACTIVE + ") VALUES " +
-                "(1, 1, 'Sir David' , 100, 0), " +  // User 1, Animal 1 (Pig), Points 100, Inactive
-                "(1, 2, 'Tutu', 200, 0), " +  // User 1, Animal 2 (Rabbit), Points 200, Inactive
-                "(1, 4, 'MooMoo', 50, 1);";   // User 1, Animal 4 (Cow), Points 0, Active
+//        String multiRowInsertUserAnimal = "INSERT INTO " + TABLE_USER_ANIMAL + " (" + KEY_USER_ANIMAL_USER_ID + ", " + KEY_USER_ANIMAL_ANIMAL_ID + ", " + KEY_USER_ANIMAL_NAME + ", " + KEY_USER_ANIMAL_POINT + ", " + KEY_USER_ANIMAL_ISACTIVE + ") VALUES " +
+//                "(1, 1, 'Sir David' , 100, 0), " +  // User 1, Animal 1 (Pig), Points 100, Inactive
+//                "(1, 2, 'Tutu', 200, 0), " +  // User 1, Animal 2 (Rabbit), Points 200, Inactive
+//                "(1, 4, 'MooMoo', 50, 1);";   // User 1, Animal 4 (Cow), Points 0, Active
 
         sqLiteDatabase.execSQL(CREATE_TABLE_USER);
         sqLiteDatabase.execSQL(CREATE_TABLE_ANIMAL);
@@ -210,7 +210,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //TODO: ONLY FOR TESTING. Remove this after testing
         sqLiteDatabase.execSQL(multiRowInsertUser);
         //TODO: ONLY FOR TESTING. Remove this after testing
-        sqLiteDatabase.execSQL(multiRowInsertUserAnimal);
+//        sqLiteDatabase.execSQL(multiRowInsertUserAnimal);
     }
 
     @Override
