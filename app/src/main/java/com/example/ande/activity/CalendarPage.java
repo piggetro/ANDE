@@ -15,6 +15,7 @@ import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
 import com.example.ande.helpers.SessionManagement;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -94,29 +95,40 @@ public class CalendarPage extends AppCompatActivity implements  View.OnClickList
                 thought = dbHandler.getLatestThought(userId, formattedDate);
                 meditate = dbHandler.getMeditationTime(userId, formattedDate);
 
-                if (!getTodayDateMMDDYYYY().equals(formattedDate)){
-                    moodView.setImageAlpha(0x3F);
-                    quotesForYou.setImageAlpha(0x3F);
-                    quotesForYou.setEnabled(false);
-                    calendarThoughtsView.setEnabled(false);
-                    calendarMoodView.setBackgroundResource(R.drawable.grey_mood);
-                    calendarThoughtsView.setBackgroundResource(R.drawable.grey_thoughts);
-                    calendarMeditationView.setBackgroundResource(R.drawable.grey_meditation);
-                    mediateView.setTextColor(Color.parseColor("#808080"));
-                    thoughtView.setTextColor(Color.parseColor("#808080"));
-                    dateTextView.setTextColor(Color.parseColor("#808080"));
-                } else {
-                    calendarThoughtsView.setEnabled(true);
-                    quotesForYou.setEnabled(true);
-                    moodView.setImageAlpha(0xFF);
-                    quotesForYou.setImageAlpha(0xFF);
-                    calendarMoodView.setBackgroundResource(R.drawable.mood);
-                    calendarThoughtsView.setBackgroundResource(R.drawable.thoughts);
-                    calendarMeditationView.setBackgroundResource(R.drawable.meditation);
-                    mediateView.setTextColor(Color.parseColor("#7DA9AC"));
-                    thoughtView.setTextColor(Color.parseColor("#7DA9AC"));
-                    dateTextView.setTextColor(Color.parseColor("#7DA9AC"));
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                    Date todayDate = sdf.parse(getTodayDateMMDDYYYY());
+                    Date inputDate = sdf.parse(formattedDate);
+
+                    if (!inputDate.after(todayDate) || inputDate.equals(todayDate)) {
+                        // formattedDate is before today's date
+                        calendarThoughtsView.setEnabled(true);
+                        quotesForYou.setEnabled(true);
+                        moodView.setImageAlpha(0xFF);
+                        quotesForYou.setImageAlpha(0xFF);
+                        calendarMoodView.setBackgroundResource(R.drawable.mood);
+                        calendarThoughtsView.setBackgroundResource(R.drawable.thoughts);
+                        calendarMeditationView.setBackgroundResource(R.drawable.meditation);
+                        mediateView.setTextColor(Color.parseColor("#7DA9AC"));
+                        thoughtView.setTextColor(Color.parseColor("#7DA9AC"));
+                        dateTextView.setTextColor(Color.parseColor("#7DA9AC"));
+                    } else {
+                        // formattedDate is after today's date
+                        moodView.setImageAlpha(0x3F);
+                        quotesForYou.setImageAlpha(0x3F);
+                        quotesForYou.setEnabled(false);
+                        calendarThoughtsView.setEnabled(false);
+                        calendarMoodView.setBackgroundResource(R.drawable.grey_mood);
+                        calendarThoughtsView.setBackgroundResource(R.drawable.grey_thoughts);
+                        calendarMeditationView.setBackgroundResource(R.drawable.grey_meditation);
+                        mediateView.setTextColor(Color.parseColor("#808080"));
+                        thoughtView.setTextColor(Color.parseColor("#808080"));
+                        dateTextView.setTextColor(Color.parseColor("#808080"));
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+
 
                 mediateView.setText(meditate + " Minutes");
 
