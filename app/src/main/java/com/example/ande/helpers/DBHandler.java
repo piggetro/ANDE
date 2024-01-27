@@ -375,18 +375,23 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void updateThought(String thoughtId, String thoughtText) {
+    public void updateThought(String thoughtId, String thoughtText) throws SQLiteException {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
-        ContentValues cv = new ContentValues();
-        cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughtText);
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughtText);
 
-        String whereClause = KEY_USER_THOUGHTS_ID + " = ?";
-        String[] whereArgs = {thoughtId};
+            String whereClause = KEY_USER_THOUGHTS_ID + " = ?";
+            String[] whereArgs = {thoughtId};
 
-        sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
+            sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
+        } catch (SQLiteException e) {
+            throw new SQLiteException("Error updating thought");
+        } finally {
+            sqLiteDatabase.close();
+        }
 
-        sqLiteDatabase.close();
     }
 
     //add point to user_animal

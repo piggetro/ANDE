@@ -52,6 +52,7 @@ public class AddThoughtPage extends AppCompatActivity implements View.OnClickLis
                 db.addThought(userId, thoughtText, convertedDate);
             } catch (SQLiteException e) {
                 Toast.makeText(AddThoughtPage.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                return;
             }
 
             Intent intent = new Intent(this, ThoughtsExpansionPage.class);
