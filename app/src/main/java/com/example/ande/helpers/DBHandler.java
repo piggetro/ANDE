@@ -569,20 +569,21 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void addMeditation(int userId, int minutes) {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+    public void addMeditation(int userId, int minutes) throws SQLException {
+        try (SQLiteDatabase sqLiteDatabase = this.getWritableDatabase()) {
+            ContentValues cv = new ContentValues();
+            cv.put(KEY_USER_MEDITATION_USER_ID, userId);
+            cv.put(KEY_USER_MEDITATION_MINUTES, minutes);
 
-        ContentValues cv = new ContentValues();
-        cv.put(KEY_USER_MEDITATION_USER_ID, userId);
-        cv.put(KEY_USER_MEDITATION_MINUTES, minutes);
+            sqLiteDatabase.insert(TABLE_USER_MEDITATION, null, cv);
 
-        sqLiteDatabase.insert(TABLE_USER_MEDITATION, null, cv);
+            int points = 5 * minutes;
 
-        int points = 5 * minutes;
-
-        addPointsToUserAnimal(userId, points);
-
-        sqLiteDatabase.close();
+            addPointsToUserAnimal(userId, points);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException("Error logging meditation");
+        }
     }
 
     public void addUserAnimal(int userId, int animalId, String animalName) {
