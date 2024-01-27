@@ -3,8 +3,8 @@ package com.example.ande.helpers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -559,10 +559,8 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void addMeditation(int userId, int minutes) throws SQLiteException {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-
-        try {
+    public void addMeditation(int userId, int minutes) throws SQLException {
+        try (SQLiteDatabase sqLiteDatabase = this.getWritableDatabase()) {
             ContentValues cv = new ContentValues();
             cv.put(KEY_USER_MEDITATION_USER_ID, userId);
             cv.put(KEY_USER_MEDITATION_MINUTES, minutes);
@@ -572,10 +570,9 @@ public class DBHandler extends SQLiteOpenHelper {
             int points = 5 * minutes;
 
             addPointsToUserAnimal(userId, points);
-        } catch (SQLiteException e) {
-            throw new SQLiteException("Error logging meditation");
-        } finally {
-            sqLiteDatabase.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException("Error logging meditation");
         }
     }
 

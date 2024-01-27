@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.SQLException;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -102,7 +103,7 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
                 int userId = sessionManagement.getSession();
                 try {
                     dbHandler.addMeditation(userId, Integer.parseInt(meditationDuration));
-                } catch (Exception e) {
+                } catch (SQLException e) {
                     Toast.makeText(MeditationPage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
