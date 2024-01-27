@@ -260,7 +260,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<Thought> getThoughtsByUserIdAndDate(int userId, String date) {
+    public ArrayList<Thought> getThoughtsByUserIdAndDate(int userId, String date) throws SQLException {
         ArrayList<Thought> thoughtsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -281,19 +281,19 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    throw new SQLiteException("Unable to retrieve thoughts");
+                    throw new SQLException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
         } else {
-            throw new SQLiteException("Unable to retrieve thoughts");
+            throw new SQLException("Unable to retrieve thoughts");
         }
 
         db.close();
         return thoughtsList;
     }
 
-    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByLatest(int userId, String date) throws SQLiteException {
+    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByLatest(int userId, String date) throws SQLException {
         ArrayList<Thought> thoughtsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -314,19 +314,19 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    throw new SQLiteException("Unable to retrieve thoughts");
+                    throw new SQLException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
         } else {
-            throw new SQLiteException("Unable to retrieve thoughts");
+            throw new SQLException("Unable to retrieve thoughts");
         }
 
         db.close();
         return thoughtsList;
     }
 
-    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByEarliest(int userId, String date) throws SQLiteException {
+    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByEarliest(int userId, String date) throws SQLException {
         ArrayList<Thought> thoughtsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -347,12 +347,12 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    throw new SQLiteException("Unable to retrieve thoughts");
+                    throw new SQLException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
         } else {
-            throw new SQLiteException("Unable to retrieve thoughts");
+            throw new SQLException("Unable to retrieve thoughts");
         }
 
         db.close();
