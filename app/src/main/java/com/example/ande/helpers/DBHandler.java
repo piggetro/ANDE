@@ -3,7 +3,9 @@ package com.example.ande.helpers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -279,17 +281,19 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                    throw new SQLiteException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
+        } else {
+            throw new SQLiteException("Unable to retrieve thoughts");
         }
 
         db.close();
         return thoughtsList;
     }
 
-    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByLatest(int userId, String date) {
+    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByLatest(int userId, String date) throws SQLiteException {
         ArrayList<Thought> thoughtsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -310,17 +314,19 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                    throw new SQLiteException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
+        } else {
+            throw new SQLiteException("Unable to retrieve thoughts");
         }
 
         db.close();
         return thoughtsList;
     }
 
-    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByEarliest(int userId, String date) {
+    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByEarliest(int userId, String date) throws SQLiteException {
         ArrayList<Thought> thoughtsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -341,43 +347,48 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                    throw new SQLiteException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
+        } else {
+            throw new SQLiteException("Unable to retrieve thoughts");
         }
 
         db.close();
         return thoughtsList;
     }
 
-    public void addThought(int userId, String thoughts, String date) {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+    public void addThought(int userId, String thoughts, String date) throws SQLException {
 
-        ContentValues cv = new ContentValues();
-        cv.put(KEY_USER_THOUGHTS_USER_ID, userId);
-        cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughts);
-        cv.put(KEY_USER_THOUGHTS_DATE, date);
+        try (SQLiteDatabase sqLiteDatabase = this.getWritableDatabase()) {
+            ContentValues cv = new ContentValues();
+            cv.put(KEY_USER_THOUGHTS_USER_ID, userId);
+            cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughts);
+            cv.put(KEY_USER_THOUGHTS_DATE, date);
 
-        sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
-
-        addPointsToUserAnimal(userId, 100);
-
-        sqLiteDatabase.close();
+            sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error adding thought");
+        }
     }
 
-    public void updateThought(String thoughtId, String thoughtText) {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+    public void updateThought(String thoughtId, String thoughtText) throws SQLException {
 
-        ContentValues cv = new ContentValues();
-        cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughtText);
+        try (SQLiteDatabase sqLiteDatabase = this.getWritableDatabase()) {
+            ContentValues cv = new ContentValues();
+            cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughtText);
 
-        String whereClause = KEY_USER_THOUGHTS_ID + " = ?";
-        String[] whereArgs = {thoughtId};
+            String whereClause = KEY_USER_THOUGHTS_ID + " = ?";
+            String[] whereArgs = {thoughtId};
 
-        sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
+            sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error updating thought");
+        }
 
-        sqLiteDatabase.close();
     }
 
     //add point to user_animal
