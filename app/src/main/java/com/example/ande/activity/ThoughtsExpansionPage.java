@@ -2,6 +2,7 @@ package com.example.ande.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -74,8 +76,16 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
                 moodView.setImageDrawable(null);
             }
 
-            ArrayList<Thought> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
-            mThoughts.addAll(thoughtsFromDb);
+            try {
+                ArrayList<Thought> thoughtsFromDb = db.getThoughtsByUserIdAndDate(userId, convertedDate);
+                mThoughts.addAll(thoughtsFromDb);
+                if (mThoughts.size() == 0) {
+                    Toast.makeText(this, "No thoughts for this date. Let's add some!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (SQLiteException e) {
+                Toast.makeText(this, "Error retrieving thoughts", Toast.LENGTH_SHORT).show();
+            }
+
             setThoughtPosition("Earliest");
         }
 
@@ -149,10 +159,14 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 
         mThoughts.clear();
 
-        if (sortOrder.equals("Latest")) {
-            mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByLatest(userId, convertedDate));
-        } else {
-            mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByEarliest(userId, convertedDate));
+        try {
+            if (sortOrder.equals("Latest")) {
+                mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByLatest(userId, convertedDate));
+            } else {
+                mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByEarliest(userId, convertedDate));
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error retrieving thoughts", Toast.LENGTH_SHORT).show();
         }
         setThoughtPosition(sortOrder);
 

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -279,17 +280,19 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                    throw new SQLiteException("Error retrieving thoughts");
                 }
             }
             cursor.close();
+        } else {
+            throw new SQLiteException("Error retrieving thoughts");
         }
 
         db.close();
         return thoughtsList;
     }
 
-    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByLatest(int userId, String date) {
+    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByLatest(int userId, String date) throws SQLiteException {
         ArrayList<Thought> thoughtsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -310,17 +313,19 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                    throw new SQLiteException("Error retrieving thoughts");
                 }
             }
             cursor.close();
+        } else {
+            throw new SQLiteException("Error retrieving thoughts");
         }
 
         db.close();
         return thoughtsList;
     }
 
-    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByEarliest(int userId, String date) {
+    public ArrayList<Thought> getThoughtsByUserIdAndDateOrderByEarliest(int userId, String date) throws SQLiteException {
         ArrayList<Thought> thoughtsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -341,10 +346,12 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    Log.e("DBHandler", "Column not found: " + KEY_USER_THOUGHTS_ID + " or " + KEY_USER_THOUGHTS_THOUGHTS);
+                    throw new SQLiteException("Error retrieving thoughts");
                 }
             }
             cursor.close();
+        } else {
+            throw new SQLiteException("Error retrieving thoughts");
         }
 
         db.close();
