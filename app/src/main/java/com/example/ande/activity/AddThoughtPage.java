@@ -1,11 +1,13 @@
 package com.example.ande.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -46,7 +48,12 @@ public class AddThoughtPage extends AppCompatActivity implements View.OnClickLis
             SessionManagement sessionManagement = new SessionManagement(AddThoughtPage.this);
             int userId = sessionManagement.getSession();
 
-            db.addThought(userId, thoughtText, convertedDate);
+            try {
+                db.addThought(userId, thoughtText, convertedDate);
+            } catch (SQLException e) {
+                Toast.makeText(AddThoughtPage.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                return;
+            }
 
             Intent intent = new Intent(this, ThoughtsExpansionPage.class);
             intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
