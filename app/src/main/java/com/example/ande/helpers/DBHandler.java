@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -558,20 +559,24 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void addMeditation(int userId, int minutes) {
+    public void addMeditation(int userId, int minutes) throws SQLiteException {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
-        ContentValues cv = new ContentValues();
-        cv.put(KEY_USER_MEDITATION_USER_ID, userId);
-        cv.put(KEY_USER_MEDITATION_MINUTES, minutes);
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(KEY_USER_MEDITATION_USER_ID, userId);
+            cv.put(KEY_USER_MEDITATION_MINUTES, minutes);
 
-        sqLiteDatabase.insert(TABLE_USER_MEDITATION, null, cv);
+            sqLiteDatabase.insert(TABLE_USER_MEDITATION, null, cv);
 
-        int points = 5 * minutes;
+            int points = 5 * minutes;
 
-        addPointsToUserAnimal(userId, points);
-
-        sqLiteDatabase.close();
+            addPointsToUserAnimal(userId, points);
+        } catch (SQLiteException e) {
+            throw new SQLiteException("Error logging meditation");
+        } finally {
+            sqLiteDatabase.close();
+        }
     }
 
     public void addUserAnimal(int userId, int animalId, String animalName) {

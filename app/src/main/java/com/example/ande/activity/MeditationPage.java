@@ -100,7 +100,13 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
 
                 SessionManagement sessionManagement = new SessionManagement(MeditationPage.this);
                 int userId = sessionManagement.getSession();
-                dbHandler.addMeditation(userId, Integer.parseInt(meditationDuration));
+                try {
+                    dbHandler.addMeditation(userId, Integer.parseInt(meditationDuration));
+                } catch (Exception e) {
+                    Toast.makeText(MeditationPage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                Toast.makeText(MeditationPage.this, "Meditation Session Ended. Enjoy the rest of your day!", Toast.LENGTH_SHORT).show();
 
                 isMeditationEnded = true;
             }
