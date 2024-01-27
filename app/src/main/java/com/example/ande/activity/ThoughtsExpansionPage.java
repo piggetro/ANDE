@@ -83,7 +83,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
                     Toast.makeText(this, "No thoughts for this date. Let's add some!", Toast.LENGTH_SHORT).show();
                 }
             } catch (SQLiteException e) {
-                Toast.makeText(this, "Error retrieving thoughts", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             setThoughtPosition("Earliest");
@@ -166,7 +166,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
                 mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByEarliest(userId, convertedDate));
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Error retrieving thoughts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         setThoughtPosition(sortOrder);
 

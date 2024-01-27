@@ -1,13 +1,13 @@
 package com.example.ande.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.database.sqlite.SQLiteException;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ande.R;
 import com.example.ande.helpers.DBHandler;
@@ -50,7 +50,7 @@ public class AddThoughtPage extends AppCompatActivity implements View.OnClickLis
 
             try {
                 db.addThought(userId, thoughtText, convertedDate);
-            } catch (SQLiteException e) {
+            } catch (SQLException e) {
                 Toast.makeText(AddThoughtPage.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }

@@ -3,6 +3,7 @@ package com.example.ande.helpers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -280,12 +281,12 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    throw new SQLiteException("Error retrieving thoughts");
+                    throw new SQLiteException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
         } else {
-            throw new SQLiteException("Error retrieving thoughts");
+            throw new SQLiteException("Unable to retrieve thoughts");
         }
 
         db.close();
@@ -313,12 +314,12 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    throw new SQLiteException("Error retrieving thoughts");
+                    throw new SQLiteException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
         } else {
-            throw new SQLiteException("Error retrieving thoughts");
+            throw new SQLiteException("Unable to retrieve thoughts");
         }
 
         db.close();
@@ -346,39 +347,36 @@ public class DBHandler extends SQLiteOpenHelper {
                     String thoughtText = cursor.getString(thoughtsIndex);
                     thoughtsList.add(new Thought(thoughtId, thoughtText));
                 } else {
-                    throw new SQLiteException("Error retrieving thoughts");
+                    throw new SQLiteException("Unable to retrieve thoughts");
                 }
             }
             cursor.close();
         } else {
-            throw new SQLiteException("Error retrieving thoughts");
+            throw new SQLiteException("Unable to retrieve thoughts");
         }
 
         db.close();
         return thoughtsList;
     }
 
-    public void addThought(int userId, String thoughts, String date) throws SQLiteException {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+    public void addThought(int userId, String thoughts, String date) throws SQLException {
 
-        try {
+        try (SQLiteDatabase sqLiteDatabase = this.getWritableDatabase()) {
             ContentValues cv = new ContentValues();
             cv.put(KEY_USER_THOUGHTS_USER_ID, userId);
             cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughts);
             cv.put(KEY_USER_THOUGHTS_DATE, date);
 
             sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
-        } catch (SQLiteException e) {
-            throw new SQLiteException("Error adding thought");
-        } finally {
-            sqLiteDatabase.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error adding thought");
         }
     }
 
-    public void updateThought(String thoughtId, String thoughtText) throws SQLiteException {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+    public void updateThought(String thoughtId, String thoughtText) throws SQLException {
 
-        try {
+        try (SQLiteDatabase sqLiteDatabase = this.getWritableDatabase()) {
             ContentValues cv = new ContentValues();
             cv.put(KEY_USER_THOUGHTS_THOUGHTS, thoughtText);
 
@@ -386,10 +384,9 @@ public class DBHandler extends SQLiteOpenHelper {
             String[] whereArgs = {thoughtId};
 
             sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
-        } catch (SQLiteException e) {
-            throw new SQLiteException("Error updating thought");
-        } finally {
-            sqLiteDatabase.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error updating thought");
         }
 
     }

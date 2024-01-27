@@ -2,7 +2,7 @@ package com.example.ande.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.sqlite.SQLiteException;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -68,7 +68,7 @@ public class EditThoughtPage extends AppCompatActivity implements View.OnClickLi
             if (!thoughtText.equals(this.thoughtText)) {
                 try {
                     db.updateThought(thoughtId, thoughtText);
-                } catch (SQLiteException e) {
+                } catch (SQLException e) {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     return;
                 }
