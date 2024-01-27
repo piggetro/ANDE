@@ -2,7 +2,7 @@ package com.example.ande.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteException;
+import android.database.SQLException;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -82,7 +82,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
                 if (mThoughts.size() == 0) {
                     Toast.makeText(this, "No thoughts for this date. Let's add some!", Toast.LENGTH_SHORT).show();
                 }
-            } catch (SQLiteException e) {
+            } catch (SQLException e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -165,7 +165,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             } else {
                 mThoughts.addAll(db.getThoughtsByUserIdAndDateOrderByEarliest(userId, convertedDate));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         setThoughtPosition(sortOrder);
