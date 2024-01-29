@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.media.MediaPlayer;
@@ -60,6 +61,11 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
+        SharedPreferences settings = getSharedPreferences("UserPrefs", 0);
+        boolean enableNotifications = settings.getBoolean("notifications", true);
+        boolean enableSound = settings.getBoolean("sound", true);
+        isAudioMuted = !enableSound;
+
         progressBar = findViewById(R.id.progress_bar);
         progressText = findViewById(R.id.progress_text);
 
@@ -75,7 +81,15 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
         TOTAL_TIME = mediaPlayer.getDuration();
 
         mediaPlayer.start();
-        showNotification();
+
+        if (isAudioMuted) {
+            mediaPlayer.setVolume(0, 0);
+            muteAudioButton.setImageResource(R.drawable.volume_muted_icon);
+        }
+
+        if (enableNotifications) {
+            showNotification();
+        }
 
         countDownTimer = new PauseableCountDownTimer(TOTAL_TIME, INTERVAL) {
             @Override
