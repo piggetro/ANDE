@@ -213,8 +213,9 @@ public class MeditationPage extends AppCompatActivity implements View.OnClickLis
                 .setContentText("Your meditation session is running")
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setOngoing(true) // The notification is ongoing (persistent)
-                .setAutoCancel(false);
+                .setOngoing(true)
+                .setAutoCancel(false)
+                .setSilent(true);
 
         // Show the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
