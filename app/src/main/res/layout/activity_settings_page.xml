@@ -64,7 +64,7 @@
             android:id="@+id/switchSoundDescriptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Notify me about new features and app notices"
+            android:text="Allow sound to be played from the app"
             android:fontFamily="@font/barlow_regular"
             android:textColor="@color/white"
             android:textSize="14dp" />
