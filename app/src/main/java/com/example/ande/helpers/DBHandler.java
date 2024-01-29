@@ -367,7 +367,9 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(KEY_USER_THOUGHTS_DATE, date);
 
             sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
+            addPointsToUserAnimal(userId, 30);
         } catch (SQLException e) {
+
             e.printStackTrace();
             throw new SQLException("Error adding thought");
         }
