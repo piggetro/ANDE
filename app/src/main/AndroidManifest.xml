@@ -17,31 +17,39 @@
         tools:targetApi="31">
         <activity
             android:name=".activity.QuotesPage"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:theme="@style/MaterialComponentsLightNoActionBar" />
         <activity
             android:name=".activity.EditThoughtPage"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.AddThoughtPage"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.FarmCollection"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.LoginSignupPage"
+            android:screenOrientation="portrait"
             android:exported="false" /> <!-- <activity -->
         <!-- android:name=".login_signup_page" -->
         <!-- android:exported="false" /> -->
         <activity
             android:name=".activity.AnimalViewerActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.ThoughtsExpansionPage"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:theme="@style/MaterialComponentsLightNoActionBar" />
         <activity
             android:name=".activity.SettingsPage"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.MeditationPage"
@@ -49,9 +57,11 @@
             android:exported="false" />
         <activity
             android:name=".activity.CalendarPage"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.Splash"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,6 +71,7 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
     </application>
 
