@@ -59,7 +59,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateText);
             abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
 
-            autoCompleteTextView = findViewById(R.id.auto_complete_meditation_minutes_text_view);
+            autoCompleteTextView = findViewById(R.id.auto_complete_thoughts_sort_by_text_view);
 
             ImageView moodView = (ImageView) findViewById(R.id.thoughtsExpansionPageMoodImage);
             SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
@@ -95,7 +95,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 
         setUIRef();
 
-        autoCompleteTextView = findViewById(R.id.auto_complete_meditation_minutes_text_view);
+        autoCompleteTextView = findViewById(R.id.auto_complete_thoughts_sort_by_text_view);
         sortByDropDownAdapter = new ArrayAdapter<>(this, R.layout.list_item, sortByDropDownItems);
         autoCompleteTextView.setAdapter(sortByDropDownAdapter);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
