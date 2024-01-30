@@ -37,6 +37,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
     String selectedDate;
     String convertedDate;
     String[] sortByDropDownItems = {"Earliest", "Latest"};
+    String sortOrder = "Earliest";
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> sortByDropDownAdapter;
     private RecyclerView mRecyclerView;
@@ -57,6 +58,8 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 
             TextView abbreviatedDateTextView = findViewById(R.id.thoughtsExpansionAbbreviatedDateText);
             abbreviatedDateTextView.setText(selectedAbbreviatedMonthDate);
+
+            autoCompleteTextView = findViewById(R.id.auto_complete_thoughts_sort_by_text_view);
 
             ImageView moodView = (ImageView) findViewById(R.id.thoughtsExpansionPageMoodImage);
             SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
@@ -87,18 +90,20 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
             }
 
             setThoughtPosition("Earliest");
+            autoCompleteTextView.setText(sortOrder);
         }
 
         setUIRef();
 
-        autoCompleteTextView = findViewById(R.id.auto_complete_meditation_minutes_text_view);
+        autoCompleteTextView = findViewById(R.id.auto_complete_thoughts_sort_by_text_view);
         sortByDropDownAdapter = new ArrayAdapter<>(this, R.layout.list_item, sortByDropDownItems);
         autoCompleteTextView.setAdapter(sortByDropDownAdapter);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                sortThoughts(item);
+                sortOrder = item;
+                getThoughtsByOrder();
             }
         });
 
@@ -146,6 +151,19 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
                 startActivity(intent);
             }
 
+            @Override
+            public void onDeleteIconClicked(Thought thought) {
+                try {
+                    db.deleteThought(thought.getThoughtId());
+                    getThoughtsByOrder();
+                    Toast.makeText(ThoughtsExpansionPage.this, "Thought deleted!", Toast.LENGTH_SHORT).show();
+                } catch (SQLException e) {
+                    Toast.makeText(ThoughtsExpansionPage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+
         });
 
         //Set adapter to RecyclerView
@@ -153,7 +171,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
     }
 
 
-    private void sortThoughts(String sortOrder) {
+    private void getThoughtsByOrder() {
         SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
         int userId = sessionManagement.getSession();
 

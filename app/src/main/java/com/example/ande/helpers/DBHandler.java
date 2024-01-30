@@ -180,9 +180,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 "('Inspiration exists, but it has to find you working.', 'Pablo Picasso', 'neutral'), " +
                 "('If you want to be happy, set a goal that commands your thoughts, liberates your energy, and inspires your hopes.', 'Andrew Carnegie', 'neutral');";
 
-
-
-        //TODO: ONLY FOR TESTING. Remove this after testing
         String multiRowInsertUser = "INSERT INTO " + TABLE_USER + " (" + KEY_USER_EMAIL + ", " + KEY_USER_USERNAME + ", " + KEY_USER_PASSWORD + ") VALUES " +
                 "('t@gmail.com', 't', 't'), " +
                 "('t2@gmail.com', 't', 't');";
@@ -202,7 +199,6 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(multiRowInsertAngryQuote);
         sqLiteDatabase.execSQL(multiRowInsertNeutralQuote);
 
-        //TODO: ONLY FOR TESTING. Remove this after testing
         sqLiteDatabase.execSQL(multiRowInsertUser);
     }
 
@@ -390,6 +386,18 @@ public class DBHandler extends SQLiteOpenHelper {
             throw new SQLException("Error updating thought");
         }
 
+    }
+
+    public void deleteThought(String thoughtId) throws SQLException {
+        try (SQLiteDatabase sqLiteDatabase = this.getWritableDatabase()) {
+            String whereClause = KEY_USER_THOUGHTS_ID + " = ?";
+            String[] whereArgs = {thoughtId};
+
+            sqLiteDatabase.delete(TABLE_USER_THOUGHTS, whereClause, whereArgs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error deleting thought");
+        }
     }
 
     //add point to user_animal
@@ -772,7 +780,6 @@ public List<Animal> getAllAnimalTypes(Context context) {
     }
 
     // Quote Table
-
     public ArrayList<Quote> getQuotesByCategory(String category) {
         ArrayList<Quote> quotesList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

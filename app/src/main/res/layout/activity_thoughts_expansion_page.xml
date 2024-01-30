@@ -59,7 +59,7 @@
             app:boxBackgroundColor="@android:color/white" >
 
             <AutoCompleteTextView
-                android:id="@+id/auto_complete_meditation_minutes_text_view"
+                android:id="@+id/auto_complete_thoughts_sort_by_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

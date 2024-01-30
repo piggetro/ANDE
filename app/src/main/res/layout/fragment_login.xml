@@ -40,16 +40,6 @@
                 android:inputType="textPassword"
                 android:padding="15dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#7DA9AC"
-                android:text="Forget Password"
-                android:gravity="end"
-                android:fontFamily="@font/barlow"
-                android:textSize="18sp"
-                />
-
         </LinearLayout>
 
         <Space
