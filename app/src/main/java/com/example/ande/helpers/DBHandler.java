@@ -391,6 +391,18 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public void deleteThought(String thoughtId) throws SQLException {
+        try (SQLiteDatabase sqLiteDatabase = this.getWritableDatabase()) {
+            String whereClause = KEY_USER_THOUGHTS_ID + " = ?";
+            String[] whereArgs = {thoughtId};
+
+            sqLiteDatabase.delete(TABLE_USER_THOUGHTS, whereClause, whereArgs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error deleting thought");
+        }
+    }
+
     //add point to user_animal
     public void addPointsToUserAnimal(int userId, int points) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
@@ -770,7 +782,6 @@ public List<Animal> getAllAnimalTypes(Context context) {
     }
 
     // Quote Table
-
     public ArrayList<Quote> getQuotesByCategory(String category) {
         ArrayList<Quote> quotesList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
