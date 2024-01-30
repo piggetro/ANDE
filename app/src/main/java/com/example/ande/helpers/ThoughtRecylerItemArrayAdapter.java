@@ -72,18 +72,29 @@ public class ThoughtRecylerItemArrayAdapter extends RecyclerView.Adapter<Thought
         private TextView thoughtId;
         private TextView thoughtText;
         private ImageView editThoughtIcon;
+        private ImageView deleteThoughtIcon;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
             thoughtId = itemView.findViewById(R.id.thoughtId);
             thoughtText = itemView.findViewById(R.id.thoughtText);
             editThoughtIcon = itemView.findViewById(R.id.editThoughtIcon);
+            deleteThoughtIcon = itemView.findViewById(R.id.deleteThoughtIcon);
 
             editThoughtIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mItemClickListener != null) {
                         mItemClickListener.onEditIconClicked(mThoughts.get(getAdapterPosition()));
+                    }
+                }
+            });
+
+            deleteThoughtIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onDeleteIconClicked(mThoughts.get(getAdapterPosition()));
                     }
                 }
             });
@@ -95,5 +106,6 @@ public class ThoughtRecylerItemArrayAdapter extends RecyclerView.Adapter<Thought
     public interface MyRecyclerViewItemClickListener {
         void onItemClicked(Thought thought);
         void onEditIconClicked(Thought thought);
+        void onDeleteIconClicked(Thought thought);
     }
 }

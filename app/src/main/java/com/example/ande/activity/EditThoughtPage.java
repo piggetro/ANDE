@@ -50,7 +50,7 @@ public class EditThoughtPage extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.viewAllAnimalsBackButton) {
+        if (v.getId() == R.id.editThoughtBackButton) {
             Intent intent = new Intent(this, ThoughtsExpansionPage.class);
             intent.putExtra("abbreviatedDate", selectedAbbreviatedMonthDate);
             intent.putExtra("date", selectedDate);
