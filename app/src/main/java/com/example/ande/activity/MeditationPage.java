@@ -31,7 +31,7 @@ import com.example.ande.helpers.SessionManagement;
 
 public class MeditationPage extends AppCompatActivity implements View.OnClickListener {
 
-    DBHandler dbHandler = new DBHandler(this);
+    private final DBHandler dbHandler = new DBHandler(this);
     private ProgressBar progressBar;
     private TextView progressText;
     private long TOTAL_TIME;

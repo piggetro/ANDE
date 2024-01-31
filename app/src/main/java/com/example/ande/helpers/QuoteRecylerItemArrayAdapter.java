@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class QuoteRecylerItemArrayAdapter extends RecyclerView.Adapter<QuoteRecylerItemArrayAdapter.MyViewHolder> {
 
-    private ArrayList<Quote> mQuotes;
-    private MyRecyclerViewItemClickListener mItemClickListener;
+    private final ArrayList<Quote> mQuotes;
+    private final MyRecyclerViewItemClickListener mItemClickListener;
 
     public QuoteRecylerItemArrayAdapter(ArrayList<Quote> quotes, MyRecyclerViewItemClickListener itemClickListener) {
         this.mQuotes = quotes;
@@ -68,9 +68,9 @@ public class QuoteRecylerItemArrayAdapter extends RecyclerView.Adapter<QuoteRecy
     }
 
     // RecyclerView View Holder
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView quoteText;
-        private TextView quoteAuthor;
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        private final TextView quoteText;
+        private final TextView quoteAuthor;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
