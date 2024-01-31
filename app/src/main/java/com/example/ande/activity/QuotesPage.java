@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
@@ -31,14 +30,14 @@ import java.util.ArrayList;
 
 public class QuotesPage extends AppCompatActivity implements View.OnClickListener {
 
-    DBHandler db = new DBHandler(this);
-    String selectedDate;
-    String convertedDate;
-    String[] sortByDropDownItems = {"All", "Happy", "Sad", "Angry", "Neutral"};
-    AutoCompleteTextView autoCompleteTextView;
-    ArrayAdapter<String> sortByDropDownAdapter;
+    private final DBHandler db = new DBHandler(this);
+    private String selectedDate;
+    private String convertedDate;
+    private final String[] sortByDropDownItems = {"All", "Happy", "Sad", "Angry", "Neutral"};
+    private AutoCompleteTextView autoCompleteTextView;
+    private ArrayAdapter<String> sortByDropDownAdapter;
     private RecyclerView mRecyclerView;
-    private ArrayList<Quote> mQuotes = new ArrayList<>();
+    private final ArrayList<Quote> mQuotes = new ArrayList<>();
 
 
     @Override
@@ -70,12 +69,9 @@ public class QuotesPage extends AppCompatActivity implements View.OnClickListene
 
         sortByDropDownAdapter = new ArrayAdapter<>(this, R.layout.list_item, sortByDropDownItems);
         autoCompleteTextView.setAdapter(sortByDropDownAdapter);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-                sortQuotes(item);
-            }
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            String item = parent.getItemAtPosition(position).toString();
+            sortQuotes(item);
         });
 
     }
@@ -88,8 +84,7 @@ public class QuotesPage extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    private void setUIRef()
-    {
+    private void setUIRef() {
         //Reference of RecyclerView
         mRecyclerView = findViewById(R.id.quotesRecyclerView);
         //Linear Layout Manager
@@ -100,16 +95,7 @@ public class QuotesPage extends AppCompatActivity implements View.OnClickListene
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
         //Create adapter
-        QuoteRecylerItemArrayAdapter myRecyclerViewAdapter = new QuoteRecylerItemArrayAdapter(mQuotes, new QuoteRecylerItemArrayAdapter.MyRecyclerViewItemClickListener()
-        {
-            @Override
-            public void onItemClicked(Quote quote) {
-                showDialog(quote);
-            }
-
-
-
-        });
+        QuoteRecylerItemArrayAdapter myRecyclerViewAdapter = new QuoteRecylerItemArrayAdapter(mQuotes, this::showDialog);
 
         //Set adapter to RecyclerView
         mRecyclerView.setAdapter(myRecyclerViewAdapter);

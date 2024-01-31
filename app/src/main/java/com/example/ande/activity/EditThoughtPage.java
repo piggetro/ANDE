@@ -15,11 +15,11 @@ import com.example.ande.helpers.DBHandler;
 
 public class EditThoughtPage extends AppCompatActivity implements View.OnClickListener {
 
-    DBHandler db = new DBHandler(this);
-    String selectedAbbreviatedMonthDate;
-    String selectedDate;
-    String thoughtId;
-    String thoughtText;
+    private final DBHandler db = new DBHandler(this);
+    private String selectedAbbreviatedMonthDate;
+    private String selectedDate;
+    private String thoughtId;
+    private String thoughtText;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -58,7 +58,7 @@ public class EditThoughtPage extends AppCompatActivity implements View.OnClickLi
         } else if (v.getId() == R.id.editThoughtSubmitButton) {
 
             TextView thoughtEditText = findViewById(R.id.editThoughtTextArea);
-            String thoughtText = thoughtEditText.getText().toString();
+            String thoughtText = thoughtEditText.getText().toString().trim();
 
             if (thoughtText.equals("")) {
                 Toast.makeText(this, "Thought cannot be empty", Toast.LENGTH_SHORT).show();

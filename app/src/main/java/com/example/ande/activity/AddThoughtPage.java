@@ -16,10 +16,10 @@ import com.example.ande.helpers.SessionManagement;
 
 public class AddThoughtPage extends AppCompatActivity implements View.OnClickListener {
 
-    DBHandler db = new DBHandler(this);
-    String selectedAbbreviatedMonthDate;
-    String selectedDate;
-    String convertedDate;
+    private final DBHandler db = new DBHandler(this);
+    private String selectedAbbreviatedMonthDate;
+    private String selectedDate;
+    private String convertedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,12 @@ public class AddThoughtPage extends AppCompatActivity implements View.OnClickLis
             startActivity(intent);
         } else if (v.getId() == R.id.addThoughtSubmitButton) {
             EditText thoughtEditText = findViewById(R.id.addThoughtTextArea);
-            String thoughtText = thoughtEditText.getText().toString();
+            String thoughtText = thoughtEditText.getText().toString().trim();
+
+            if (thoughtText.equals("")) {
+                Toast.makeText(this, "Thought cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             SessionManagement sessionManagement = new SessionManagement(AddThoughtPage.this);
             int userId = sessionManagement.getSession();

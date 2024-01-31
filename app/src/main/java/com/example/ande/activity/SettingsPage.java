@@ -32,26 +32,20 @@ public class SettingsPage extends AppCompatActivity implements View.OnClickListe
         switchNotifications.setChecked(settings.getBoolean(KEY_NOTIFICATIONS, true));
         switchSound.setChecked(settings.getBoolean(KEY_SOUND, true));
 
-        switchNotifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
-                editor.putBoolean(KEY_NOTIFICATIONS, isChecked);
-                editor.apply();
+        switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
+            editor.putBoolean(KEY_NOTIFICATIONS, isChecked);
+            editor.apply();
 
-                Toast.makeText(SettingsPage.this, "Notifications " + (isChecked ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(SettingsPage.this, "Notifications " + (isChecked ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
         });
 
-        switchSound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
-                editor.putBoolean(KEY_SOUND, isChecked);
-                editor.apply();
+        switchSound.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
+            editor.putBoolean(KEY_SOUND, isChecked);
+            editor.apply();
 
-                Toast.makeText(SettingsPage.this, "Sound " + (isChecked ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(SettingsPage.this, "Sound " + (isChecked ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
         });
     }
 

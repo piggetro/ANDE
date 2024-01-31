@@ -264,9 +264,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(userId), date};
         String orderBy = null;
 
-        Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy);
-
-        if (cursor != null) {
+        try (Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy)) {
             int idIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_ID);
             int thoughtsIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_THOUGHTS);
 
@@ -279,9 +277,6 @@ public class DBHandler extends SQLiteOpenHelper {
                     throw new SQLException("Unable to retrieve thoughts");
                 }
             }
-            cursor.close();
-        } else {
-            throw new SQLException("Unable to retrieve thoughts");
         }
 
         db.close();
@@ -292,14 +287,12 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<Thought> thoughtsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String[] columns = {KEY_USER_THOUGHTS_ID, KEY_USER_THOUGHTS_THOUGHTS};
+        String[] columns = { KEY_USER_THOUGHTS_ID, KEY_USER_THOUGHTS_THOUGHTS };
         String selection = KEY_USER_THOUGHTS_USER_ID + " = ? AND " + KEY_USER_THOUGHTS_DATE + " = ?";
-        String[] selectionArgs = {String.valueOf(userId), date};
+        String[] selectionArgs = { String.valueOf(userId), date };
         String orderBy = KEY_USER_THOUGHTS_TIME + " DESC";
 
-        Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy);
-
-        if (cursor != null) {
+        try (Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy)) {
             int idIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_ID);
             int thoughtsIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_THOUGHTS);
 
@@ -312,9 +305,6 @@ public class DBHandler extends SQLiteOpenHelper {
                     throw new SQLException("Unable to retrieve thoughts");
                 }
             }
-            cursor.close();
-        } else {
-            throw new SQLException("Unable to retrieve thoughts");
         }
 
         db.close();
@@ -330,9 +320,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(userId), date};
         String orderBy = KEY_USER_THOUGHTS_TIME + " ASC";
 
-        Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy);
-
-        if (cursor != null) {
+        try (Cursor cursor = db.query(TABLE_USER_THOUGHTS, columns, selection, selectionArgs, null, null, orderBy)) {
             int idIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_ID);
             int thoughtsIndex = cursor.getColumnIndex(KEY_USER_THOUGHTS_THOUGHTS);
 
@@ -345,9 +333,6 @@ public class DBHandler extends SQLiteOpenHelper {
                     throw new SQLException("Unable to retrieve thoughts");
                 }
             }
-            cursor.close();
-        } else {
-            throw new SQLException("Unable to retrieve thoughts");
         }
 
         db.close();
@@ -365,8 +350,7 @@ public class DBHandler extends SQLiteOpenHelper {
             sqLiteDatabase.insert(TABLE_USER_THOUGHTS, null, cv);
             addPointsToUserAnimal(userId, 30);
         } catch (SQLException e) {
-
-            e.printStackTrace();
+            Log.e("DBHandler", "Error adding thought", e);
             throw new SQLException("Error adding thought");
         }
     }
@@ -382,7 +366,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
             sqLiteDatabase.update(TABLE_USER_THOUGHTS, cv, whereClause, whereArgs);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e("DBHandler", "Error updating thought", e);
             throw new SQLException("Error updating thought");
         }
 
@@ -395,7 +379,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
             sqLiteDatabase.delete(TABLE_USER_THOUGHTS, whereClause, whereArgs);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e("DBHandler", "Error deleting thought", e);
             throw new SQLException("Error deleting thought");
         }
     }
@@ -668,7 +652,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (animalPoints == -1) {
             emotion = "neutral";
-        }else if (animalPoints < 20) {
+        } else if (animalPoints < 20) {
             emotion = "verysad";
         } else if (animalPoints < 50) {
             emotion = "sad";
@@ -784,15 +768,13 @@ public List<Animal> getAllAnimalTypes(Context context) {
         ArrayList<Quote> quotesList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-
         String[] columns = {KEY_QUOTE_ID, KEY_QUOTE_TEXT, KEY_QUOTE_AUTHOR};
         String selection = KEY_QUOTE_CATEGORY + " = ?";
         String[] selectionArgs = {category.toLowerCase()};
-        String orderBy = null;
 
-        Cursor cursor = category.equals("All") ? db.query(TABLE_QUOTE, columns, null, null, null, null, null) : db.query(TABLE_QUOTE, columns, selection, selectionArgs, null, null, null);
-
-        if (cursor != null) {
+        try (Cursor cursor = category.equals("All") ?
+                db.query(TABLE_QUOTE, columns, null, null, null, null, null) :
+                db.query(TABLE_QUOTE, columns, selection, selectionArgs, null, null, null)) {
             int idIndex = cursor.getColumnIndex(KEY_QUOTE_ID);
             int quoteTextIndex = cursor.getColumnIndex(KEY_QUOTE_TEXT);
             int quoteAuthorIndex = cursor.getColumnIndex(KEY_QUOTE_AUTHOR);
@@ -806,8 +788,8 @@ public List<Animal> getAllAnimalTypes(Context context) {
                     Log.e("DBHandler", "Column not found: " + KEY_QUOTE_ID + " or " + KEY_QUOTE_TEXT + " or " + KEY_QUOTE_AUTHOR);
                 }
             }
-            cursor.close();
         }
+
 
         db.close();
         return quotesList;

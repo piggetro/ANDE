@@ -32,16 +32,16 @@ import java.util.ArrayList;
 
 public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnClickListener {
 
-    DBHandler db = new DBHandler(this);
-    String selectedAbbreviatedMonthDate;
-    String selectedDate;
-    String convertedDate;
-    String[] sortByDropDownItems = {"Earliest", "Latest"};
-    String sortOrder = "Earliest";
-    AutoCompleteTextView autoCompleteTextView;
-    ArrayAdapter<String> sortByDropDownAdapter;
+    private final DBHandler db = new DBHandler(this);
+    private String selectedAbbreviatedMonthDate;
+    private String selectedDate;
+    private String convertedDate;
+    private final String[] sortByDropDownItems = {"Earliest", "Latest"};
+    private String sortOrder = "Earliest";
+    private AutoCompleteTextView autoCompleteTextView;
+    private ArrayAdapter<String> sortByDropDownAdapter;
     private RecyclerView mRecyclerView;
-    private ArrayList<Thought> mThoughts = new ArrayList<>();
+    private final ArrayList<Thought> mThoughts = new ArrayList<>();
 
 
     @Override
@@ -61,7 +61,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
 
             autoCompleteTextView = findViewById(R.id.auto_complete_thoughts_sort_by_text_view);
 
-            ImageView moodView = (ImageView) findViewById(R.id.thoughtsExpansionPageMoodImage);
+            ImageView moodView = findViewById(R.id.thoughtsExpansionPageMoodImage);
             SessionManagement sessionManagement = new SessionManagement(ThoughtsExpansionPage.this);
             int userId = sessionManagement.getSession();
 
@@ -98,13 +98,9 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         autoCompleteTextView = findViewById(R.id.auto_complete_thoughts_sort_by_text_view);
         sortByDropDownAdapter = new ArrayAdapter<>(this, R.layout.list_item, sortByDropDownItems);
         autoCompleteTextView.setAdapter(sortByDropDownAdapter);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-                sortOrder = item;
-                getThoughtsByOrder();
-            }
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            sortOrder = parent.getItemAtPosition(position).toString();
+            getThoughtsByOrder();
         });
 
     }
@@ -122,8 +118,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void setUIRef()
-    {
+    private void setUIRef() {
         //Reference of RecyclerView
         mRecyclerView = findViewById(R.id.thoughtsRecyclerView);
 
@@ -133,8 +128,7 @@ public class ThoughtsExpansionPage extends AppCompatActivity implements View.OnC
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
         //Create adapter
-        ThoughtRecylerItemArrayAdapter myRecyclerViewAdapter = new ThoughtRecylerItemArrayAdapter(mThoughts, new ThoughtRecylerItemArrayAdapter.MyRecyclerViewItemClickListener()
-        {
+        ThoughtRecylerItemArrayAdapter myRecyclerViewAdapter = new ThoughtRecylerItemArrayAdapter(mThoughts, new ThoughtRecylerItemArrayAdapter.MyRecyclerViewItemClickListener() {
             @Override
             public void onItemClicked(Thought thought) {
                 showDialog(thought.getPosition(), thought.getThoughtText());
